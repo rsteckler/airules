@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QuestionStep } from './QuestionStep';
@@ -83,5 +83,17 @@ describe('QuestionStep', () => {
     const textarea = screen.getByLabelText(/tell me more/i);
     await user.type(textarea, 'Some extra context');
     expect(textarea).toHaveValue('Some extra context');
+  });
+
+  it('shows "Skip this question" when onSkip is provided and calls it on click', async () => {
+    const user = userEvent.setup();
+    const onSkip = vi.fn();
+    renderWithProvider(
+      <QuestionStep questionId={QUESTION_IDS.PROJECT_TYPE} onSkip={onSkip} />
+    );
+    const skipBtn = screen.getByRole('button', { name: /skip this question/i });
+    expect(skipBtn).toBeInTheDocument();
+    await user.click(skipBtn);
+    expect(onSkip).toHaveBeenCalledTimes(1);
   });
 });

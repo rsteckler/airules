@@ -16,7 +16,7 @@ function isOtherSelected(questionId, answers, value) {
   return Array.isArray(value) && value.includes(OTHER_VALUE);
 }
 
-export function QuestionStep({ questionId }) {
+export function QuestionStep({ questionId, onSkip, skipInNav }) {
   const { answers, dispatch } = useQuestionnaire();
   const question = questionsById[questionId];
   if (!question) return null;
@@ -143,15 +143,15 @@ export function QuestionStep({ questionId }) {
         </div>
       )}
 
-      {showOther && (
-        <div className="question-step__other">
+      {question.otherOption && (
+        <div className={`question-step__other ${showOther ? 'question-step__other--open' : ''}`}>
           <label>
             Please specify:
             <input
               type="text"
               value={otherText}
               onChange={(e) => setOther(e.target.value)}
-              placeholder="Describe your choice..."
+              placeholder="Please describe..."
             />
           </label>
         </div>
@@ -159,15 +159,21 @@ export function QuestionStep({ questionId }) {
 
       {question.tellMeMore && (
         <div className="question-step__tell-me-more">
-          <label>
-            Tell me more (optional):
-            <textarea
-              value={tellMeMoreText}
-              onChange={(e) => setTellMeMore(e.target.value)}
-              placeholder="Any extra context for this question..."
-              rows={3}
-            />
-          </label>
+          <textarea
+            value={tellMeMoreText}
+            onChange={(e) => setTellMeMore(e.target.value)}
+            placeholder="Optional - add more context"
+            rows={3}
+            aria-label="Optional - add more context"
+          />
+        </div>
+      )}
+
+      {onSkip && !skipInNav && (
+        <div className="question-step__skip">
+          <button type="button" className="question-step__skip-btn" onClick={onSkip}>
+            Skip this question
+          </button>
         </div>
       )}
     </div>

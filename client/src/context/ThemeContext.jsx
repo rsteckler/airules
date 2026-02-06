@@ -4,10 +4,10 @@ const STORAGE_KEY = 'airules_theme';
 
 /** @type {'light' | 'dark' | 'system'} */
 function getStored() {
-  if (typeof window === 'undefined') return 'system';
+  if (typeof window === 'undefined') return 'dark';
   const v = localStorage.getItem(STORAGE_KEY);
   if (v === 'light' || v === 'dark' || v === 'system') return v;
-  return 'system';
+  return 'dark';
 }
 
 function getEffectiveTheme(theme) {

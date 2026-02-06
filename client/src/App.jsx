@@ -1,37 +1,45 @@
 import React, { useState } from 'react';
 import { QuestionnaireProvider } from './context/QuestionnaireContext';
 import { ThemeProvider } from './context/ThemeContext';
-import { ThemeToggle } from './components/ThemeToggle';
-import { Welcome } from './pages/Welcome';
+import { OrbProvider } from './context/OrbContext';
+import { SiteHeader } from './components/SiteHeader';
+import { SiteFooter } from './components/SiteFooter';
+import { StarfieldBackground } from './components/StarfieldBackground';
 import { Questionnaire } from './pages/Questionnaire';
 import { Results } from './pages/Results';
 
 function App() {
-  const [screen, setScreen] = useState('welcome');
+  const [screen, setScreen] = useState('questionnaire');
+  const [startAtStep, setStartAtStep] = useState(0);
 
   return (
     <ThemeProvider>
-      <QuestionnaireProvider>
-        <div className="app">
-          <header className="app-header">
-            <ThemeToggle />
-          </header>
-          <main className="app-main">
-            {screen === 'welcome' && (
-              <Welcome onStartQuestionnaire={() => setScreen('questionnaire')} />
-            )}
-            {screen === 'questionnaire' && (
-              <Questionnaire
-                onBackToStart={() => setScreen('welcome')}
-                onShowResults={() => setScreen('results')}
-              />
-            )}
-            {screen === 'results' && (
-              <Results onBackToQuestionnaire={() => setScreen('questionnaire')} />
-            )}
+      <OrbProvider>
+        <QuestionnaireProvider>
+        <div className="app-shell">
+          <StarfieldBackground />
+          <SiteHeader onGoHome={() => { setStartAtStep(0); setScreen('questionnaire'); }} />
+          <main className="app-center">
+            <div className="app-center__content">
+              {screen === 'questionnaire' && (
+                <Questionnaire
+                  initialStepIndex={startAtStep}
+                  onBackToStart={() => {
+                    setStartAtStep(0);
+                    setScreen('questionnaire');
+                  }}
+                  onShowResults={() => setScreen('results')}
+                />
+              )}
+              {screen === 'results' && (
+                <Results onBackToQuestionnaire={() => setScreen('questionnaire')} />
+              )}
+            </div>
           </main>
+          <SiteFooter />
         </div>
-      </QuestionnaireProvider>
+        </QuestionnaireProvider>
+      </OrbProvider>
     </ThemeProvider>
   );
 }
