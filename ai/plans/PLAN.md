@@ -66,7 +66,8 @@ Implement these as the first version; each question supports **“other”** and
 | 4   | Data layer                    | Multi/single: e.g. SQL, NoSQL, ORM names, “Other”                | Data/schema rules                      |
 | 5   | Static site in repo?          | Yes/No (+ optional path)                                         | Static site rules / paths              |
 | 6   | Docs website in repo?         | Yes/No (+ optional path)                                         | Docs structure / tooling               |
-| 7   | When should agents run tests? | Multi: before responding / before commit / before push / never   | Test-related rules                     |
+| 7   | Test framework                | Single/multi: e.g. Jest, Vitest, pytest, Mocha, Playwright, “Other” | Test-runner-specific rules          |
+| 8   | When should agents run tests? | Multi: before responding / before commit / before push / never   | Test-related rules                     |
 
 
 Extensible: add more questions later (e.g. monorepo structure, package manager, language versions) using the same pattern.
@@ -82,7 +83,7 @@ Extensible: add more questions later (e.g. monorepo structure, package manager, 
   - Data (e.g. `prisma`, `django`, `*migrations*`)
   - Static site (e.g. `docs/`, `storybook`, `docusaurus`)
   - Docs site (e.g. `docs/`, MkDocs, Docusaurus)
-  - Test runners (Jest, Vitest, pytest, etc.) and where they’re run (scripts, CI)
+  - Test framework (Jest, Vitest, pytest, etc.) and where they’re run (scripts, CI)
 - **Output:** Pre-filled answers for the questionnaire; “tell me more” can be left for the user. Agent uses this plus user overrides for final analysis.
 
 ---
@@ -103,6 +104,7 @@ Extensible: add more questions later (e.g. monorepo structure, package manager, 
 - **Frontend:** React (Vite), React Router for steps, minimal state (e.g. context or a small store) for questionnaire answers; no heavy UI framework required—keep it simple.
 - **Backend:** Node (Express or Fastify), REST endpoints: e.g. `POST /api/session`, `GET/PATCH /api/session/:id`, `POST /api/analyze-repo`, `POST /api/generate-rules`. Optional: lightweight DB (SQLite or Postgres) for sessions if you want “save and resume” later.
 - **Agent:** Implement as a backend “service” that receives answers + optional repo analysis, runs the flow (e.g. in process or via a small script), and returns snippet keys + format. Can be a separate process or the same Node process.
+- **Testing (this repo):** Use one test framework for the whole repo (e.g. Vitest for client and server). Add unit and integration tests as features are built. Each phase should add or extend tests for the code it delivers. `npm run test` at root and in each workspace should run the suite.
 
 ---
 
@@ -124,10 +126,11 @@ airules/
 │   │   ├── pages/           # Welcome, Questionnaire, Results (rules display + download)
 │   │   ├── context/         # Questionnaire state
 │   │   └── api/             # Client for backend
+│   ├── src/**/*.test.jsx     # Client tests (Vitest)
 │   └── ...
 ├── server/                  # Node backend
 │   ├── package.json
-│   ├── src/
+│   ├── src/                  # incl. *.test.js for server tests (Vitest or Jest)
 │   │   ├── index.js         # Express/Fastify app, routes
 │   │   ├── routes/          # session, analyze-repo, generate-rules
 │   │   ├── services/
@@ -144,9 +147,10 @@ airules/
 ## 8. Implementation order for future agents
 
 1. **Scaffold**
-  - Root `package.json` (optional workspaces), `README.md`, and this plan in `docs/PLAN.md`.
+  - Root `package.json` (optional workspaces), `README.md`, and this plan in `ai/plans/PLAN.md`.
   - `client/`: Vite + React, router, minimal layout (steps indicator, next/back).
   - `server/`: Node + Express/Fastify, health route, CORS for `client`.
+  - Test framework (e.g. Vitest) for client and server; `npm run test` in each workspace. Add tests as each feature is implemented.
 2. **Questionnaire data model and UI**
   - Define questions (and branching logic) in a single source (e.g. `client/src/data/questions.js` or server-owned JSON).
   - Implement one question per step (or group where it makes sense); “other” and “tell me more” on each.
@@ -174,8 +178,8 @@ airules/
 
 ## 10. Key contracts (for agents)
 
-- **Session:** If implemented, use something like `{ id, answers, repoAnalysis?, createdAt }`. Answers shape: e.g. `{ projectType, frontendTech, backendTech, dataLayer, staticSite, docsSite, testStrategy, otherFields, tellMeMore }`.
-- **Analyze-repo response:** e.g. `{ projectType?, frontend?, backend?, data?, staticPath?, docsPath?, testRunner? }` — only fields that could be inferred.
+- **Session:** If implemented, use something like `{ id, answers, repoAnalysis?, createdAt }`. Answers shape: e.g. `{ projectType, frontendTech, backendTech, dataLayer, staticSite, docsSite, testFramework, testStrategy, otherFields, tellMeMore }`.
+- **Analyze-repo response:** e.g. `{ projectType?, frontend?, backend?, data?, staticPath?, docsPath?, testFramework?, testRunner? }` — only fields that could be inferred.
 - **Generate-rules request:** session id or full `answers` (+ optional `repoAnalysis`). Response: `{ content: string, format: "cursor" | "claude" | "generic", filename: string }`.
 
 Future agents should follow this plan, implement in the order above, and extend the questionnaire and snippet set without changing these core contracts unless the product is explicitly expanded.
@@ -199,10 +203,11 @@ This section breaks the project into phases so that **one subagent (e.g. Sonnet-
 - Initialize git (if not already). Create root `package.json` with npm workspaces for `client` and `server`.
 - Add `.gitignore` (node_modules, .env, dist, .DS_Store, etc.).
 - Create `README.md` with project description, link to plan, and placeholder "Getting started."
-- Copy or link this plan into `docs/PLAN.md` in the repo.
+- Copy or link this plan into `ai/plans/PLAN.md` in the repo.
 - Add basic tooling: `.editorconfig` and/or `.prettierrc` if desired.
+- Add test framework (e.g. Vitest) to both client and server workspaces. Add `npm run test` scripts at root and in each package. No tests required yet; framework must be runnable.
 
-**Deliverables:** Repo structure ready for Phase 2. `npm install` at root succeeds. No `client/` or `server/` app code yet—only workspace config.
+**Deliverables:** Repo structure ready for Phase 2. `npm install` at root succeeds. `npm run test` runs (empty or single smoke test). No `client/` or `server/` app code yet—only workspace config.
 
 **Agent instruction:** "Execute Phase 1 of the airules plan. Initialize the monorepo structure. Do not create client or server app code."
 
@@ -217,15 +222,16 @@ This section breaks the project into phases so that **one subagent (e.g. Sonnet-
 **Tasks:**
 
 - Scaffold `client/` with Vite + React. Add React Router.
-- Define question data in `client/src/data/questions.js` per section 3 (all 7 core questions, with "other" and "tell me more" support).
+- Define question data in `client/src/data/questions.js` per section 3 (all 8 core questions, including test framework, with "other" and "tell me more" support).
 - Implement branching: hide FE questions if project type is BE/Data; hide BE questions if FE-only; etc.
 - Build step-by-step questionnaire UI: one question per step (or grouped where logical), Next/Back, step indicator.
 - Implement "other" (custom text input) and optional "tell me more" (textarea) on each question.
 - Add a "Favorite AI agent" question: Cursor / Claude / Generic (for output format).
 - Create a Results page that shows a placeholder: "Your rules will appear here." Include Copy and Download buttons (non-functional for now).
 - Basic layout: Welcome/landing → Questionnaire → Results.
+- Add tests for questionnaire components, question data, and branching logic (e.g. Vitest + React Testing Library).
 
-**Deliverables:** `npm run dev` in `client/` runs the app. User can complete the questionnaire and reach Results. No API calls.
+**Deliverables:** `npm run dev` in `client/` runs the app. User can complete the questionnaire and reach Results. Client test suite runs and covers core questionnaire behavior. No API calls.
 
 **Agent instruction:** "Execute Phase 2 of the airules plan. Build the full questionnaire UI with branching, 'other', and 'tell me more'. Results page shows placeholder only."
 
@@ -245,8 +251,9 @@ This section breaks the project into phases so that **one subagent (e.g. Sonnet-
 - Add `GET /health` (or `/`) for health check.
 - Create `client/src/api/` with a fetch wrapper. On questionnaire navigation, optionally PATCH session. On start, optionally POST to create session.
 - Store session id in React state or localStorage. Persist answers to backend as user progresses (debounced or on step change).
+- Add tests for session API (e.g. request handlers, create/GET/PATCH session). Use Vitest (or Jest) with a test HTTP client (e.g. supertest or fetch).
 
-**Deliverables:** `npm run dev` in `server/` runs API. Client creates/updates sessions. Questionnaire state survives page refresh if session id is preserved (e.g. in URL or localStorage).
+**Deliverables:** `npm run dev` in `server/` runs API. Client creates/updates sessions. Questionnaire state survives page refresh if session id is preserved (e.g. in URL or localStorage). Server test suite covers session endpoints.
 
 **Agent instruction:** "Execute Phase 3 of the airules plan. Add the Node backend and session API. Connect the client to persist questionnaire answers."
 
@@ -260,13 +267,14 @@ This section breaks the project into phases so that **one subagent (e.g. Sonnet-
 
 **Tasks:**
 
-- Create `server/src/rules-snippets/` directory. Add a manifest (e.g. `manifest.json`) mapping snippet keys to file paths. Create placeholder snippet files for: `base`, `react`, `vue`, `node`, `python`, `sql`, `nosql`, `static-site`, `docs-site`, `tests-before-respond`, `tests-before-commit`, `tests-before-push`, `cursor-format`, `claude-format`, `generic-format`.
+- Create `server/src/rules-snippets/` directory. Add a manifest (e.g. `manifest.json`) mapping snippet keys to file paths. Create placeholder snippet files for: `base`, `react`, `vue`, `node`, `python`, `sql`, `nosql`, `static-site`, `docs-site`, test frameworks (e.g. `jest`, `vitest`, `pytest`), `tests-before-respond`, `tests-before-commit`, `tests-before-push`, `cursor-format`, `claude-format`, `generic-format`.
 - Implement `rulesGenerator.js`: given `{ snippetKeys: string[], format: "cursor"|"claude"|"generic" }`, load and concatenate snippets, return `{ content, filename }`.
-- Implement `agentFlow.js`: input = `answers`; output = `{ snippetKeys, format }`. Use deterministic mapping: projectType + frontendTech + backendTech + dataLayer + staticSite + docsSite + testStrategy → snippet keys. Use `format` from "favorite agent" answer.
+- Implement `agentFlow.js`: input = `answers`; output = `{ snippetKeys, format }`. Use deterministic mapping: projectType + frontendTech + backendTech + dataLayer + staticSite + docsSite + testFramework + testStrategy → snippet keys. Use `format` from "favorite agent" answer.
 - Add `POST /api/generate-rules` with body `{ sessionId }` or `{ answers }`. Run agentFlow, then rulesGenerator; return `{ content, filename }`.
 - Update client Results page: on mount (or when reaching Results), call `POST /api/generate-rules` with current session/answers. Display content in a `<pre>` or code block. Wire Copy (clipboard) and Download (blob + anchor download).
+- Add tests for rulesGenerator and agentFlow (unit tests). Add API test for `POST /api/generate-rules`. Optionally add client test for Results page behavior.
 
-**Deliverables:** End-to-end flow works. User completes questionnaire → Results page shows generated rules → Copy and Download work. No repo URL analysis.
+**Deliverables:** End-to-end flow works. User completes questionnaire → Results page shows generated rules → Copy and Download work. Tests cover rules generation and generate-rules API. No repo URL analysis.
 
 **Agent instruction:** "Execute Phase 4 of the airules plan. Implement rules snippets, rulesGenerator, agentFlow, and the generate-rules API. Connect Results page to display and download rules."
 
@@ -285,8 +293,9 @@ This section breaks the project into phases so that **one subagent (e.g. Sonnet-
 - Update `agentFlow.js` to accept optional `repoAnalysis`. When present, use it to override or refine snippet keys (e.g. prefer Vitest if repo has `vitest.config.*`).
 - Add a "Paste repo URL" input on Welcome or first step. "Analyze" button calls `POST /api/analyze-repo`. On success, pre-fill questionnaire from response; user can edit before submitting.
 - If using GitHub API, document `GITHUB_TOKEN` env var for higher rate limits. Do not commit tokens.
+- Add tests for repoAnalyzer (e.g. with mocked API or fixture responses) and for `POST /api/analyze-repo`.
 
-**Deliverables:** User can paste a repo URL, click Analyze, and see questionnaire pre-filled. Generated rules can incorporate repo-derived data. Graceful degradation if analysis fails.
+**Deliverables:** User can paste a repo URL, click Analyze, and see questionnaire pre-filled. Generated rules can incorporate repo-derived data. Graceful degradation if analysis fails. Tests cover repo analysis.
 
 **Agent instruction:** "Execute Phase 5 of the airules plan. Implement repo analysis and pre-fill. Add 'Paste repo URL' and wire analyze-repo to questionnaire."
 
@@ -307,8 +316,9 @@ This section breaks the project into phases so that **one subagent (e.g. Sonnet-
 - Add `npm run build` for client; ensure server can serve static client build or document separate hosting.
 - Document deployment options: Vercel (client) + Railway/Fly/Render (server), or combined on a platform that supports both.
 - Add a simple `CONTRIBUTING.md` or deployment section in README.
+- Ensure full test suite passes. Add any missing tests for polish/validation paths. Document how to run tests in README.
 
-**Deliverables:** App is production-ready: clear errors, validation, and deployment docs. Docker optional.
+**Deliverables:** App is production-ready: clear errors, validation, and deployment docs. Full test suite passes and is documented. Docker optional.
 
 **Agent instruction:** "Execute Phase 6 of the airules plan. Add polish, error handling, validation, and deployment documentation."
 
@@ -363,4 +373,17 @@ _This section is updated by each phase with decisions, deviations, and details t
 - **Node:** Root package specifies `"engines": { "node": ">=18" }` for consistency.
 - **Tooling:** `.editorconfig` and `.prettierrc` were added. Prettier is not installed as a dependency in Phase 1; Phase 2/3 may add it to client/server or root if desired.
 - **Plan location:** The canonical plan may live in `docs/PLAN.md` or `ai/plans/PLAN.md`; this section (§12) should be kept in sync. Each phase should append its notes here.
+- **Testing (retrofit):** Vitest was added to both workspaces. Root `package.json` has `"test": "npm run test --workspaces --if-present"`. Client uses Vitest with `environment: 'jsdom'` and `setupFiles: './src/test/setup.js'` (jest-dom for matchers). Server has `vitest.config.js` and a single smoke test in `server/test/smoke.test.js`. `npm run test` at root runs both client and server test suites.
 - **Deviations:** None; Phase 1 matched the plan.
+
+### Phase 2 (Client scaffold and questionnaire UI) — completed
+
+- **Scaffold:** `client/` was scaffolded with Vite 5, React 18, and React Router 6. Entry: `index.html` → `src/main.jsx` → `App.jsx`. No `client/src/api/` folder yet (Phase 3 will add the API client).
+- **Question data:** All 8 core questions (including test framework, per plan §3) plus “Favorite AI agent” are defined in `client/src/data/questions.js`. Exports: `QUESTION_IDS`, `QUESTION_ORDER`, `questions`, `questionsById`, `getVisibleQuestionIds(answers)`, `isQuestionVisible(questionId, answers)`.
+- **Branching:** Visibility is driven by `projectType`. Frontend tech is shown only for `fe` and `fullstack`; backend tech and data layer only for `be`, `data`, and `fullstack`. Static site, docs site, test framework, test strategy, and favorite agent are always shown. The questionnaire step index is clamped when visible steps shrink (e.g. user goes back and changes project type).
+- **Answers shape:** Aligned with plan §10. Multi-select fields (`frontendTech`, `backendTech`, `dataLayer`, `testFramework`, `testStrategy`) are arrays. Yes/no + path (`staticSite`, `docsSite`) are `{ yes: boolean | null, path: string }`. `otherFields[questionId]` and `tellMeMore[questionId]` hold per-question “other” text and optional “tell me more” text. Context lives in `client/src/context/QuestionnaireContext.jsx` (useReducer, no persistence).
+- **UI:** One question per step. Each question supports “other” (custom text input when “Other” is selected) and optional “tell me more” (textarea) where the question config allows. Step indicator shows “Step X of Y”. Nav: “Back” / “Back to start” and “Next” / “Generate rules”. Results page shows placeholder “Your rules will appear here.” with Copy and Download buttons (non-functional until Phase 4).
+- **Routes:** `/` (Welcome), `/questionnaire`, `/results`. No API calls; all state in memory.
+- **Results page access:** Users can open `/results` directly without completing the questionnaire. For Phase 2 this is acceptable. Phase 4 will add validation/handling for missing or invalid session/answers when generating and displaying rules.
+- **Testing (retrofit):** Client test suite uses Vitest + React Testing Library + jsdom. `client/src/test/setup.js` imports `@testing-library/jest-dom/vitest`. Tests added: (1) `client/src/data/questions.test.js` — question data exports, `isQuestionVisible` for all question ids and project types, `getVisibleQuestionIds` for empty/fe/be/fullstack and order preservation; (2) `client/src/components/StepIndicator.test.jsx` — step label and progressbar role; (3) `client/src/components/QuestionStep.test.jsx` — project type and multi-select/yesno/favorite agent rendering, selection updates context, unknown id returns null; selecting “Other” shows “Please specify” input and typing updates context; “Tell me more” textarea appears when enabled and typing updates context; (4) `client/src/pages/Questionnaire.test.jsx` — first step, step indicator, branching (Backend only → backend tech not frontend; Frontend only → frontend tech), Back button. Run with `npm run test` in `client/` or from root.
+- **Deviations:** Plan suggests “docs/PLAN.md”; the repo uses `ai/plans/PLAN.md` from Phase 1. Phase 2 did not add an empty `client/src/api/` directory; Phase 3 will create it when adding the session API client.

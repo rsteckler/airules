@@ -2,12 +2,10 @@
   "name": "airules",
   "private": true,
   "description": "AI Rules Generator – questionnaire and rules generation for Cursor, Claude, etc.",
-  "workspaces": [
-    "client",
-    "server"
-  ],
+  "workspaces": ["client", "server"],
   "scripts": {
-    "install:all": "npm install"
+    "install:all": "npm install",
+    "test": "npm run test --workspaces --if-present"
   },
   "engines": {
     "node": ">=18"
