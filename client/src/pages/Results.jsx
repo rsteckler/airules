@@ -1,8 +1,6 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
-export function Results() {
-  const navigate = useNavigate();
+export function Results({ onBackToQuestionnaire }) {
 
   const handleCopy = () => {
     // Non-functional for Phase 2; Phase 4 will wire to real content
@@ -35,7 +33,7 @@ export function Results() {
             Download
           </button>
         </div>
-        <button type="button" className="results-back" onClick={() => navigate('/questionnaire')}>
+        <button type="button" className="results-back" onClick={onBackToQuestionnaire}>
           Back to questionnaire
         </button>
       </div>

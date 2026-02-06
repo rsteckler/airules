@@ -1,18 +1,18 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
 import { Questionnaire } from './Questionnaire';
 import { QuestionnaireProvider } from '../context/QuestionnaireContext';
-import { QUESTION_IDS } from '../data/questions';
 
-function renderQuestionnaire() {
+function renderQuestionnaire(props = {}) {
   return render(
-    <MemoryRouter initialEntries={['/questionnaire']} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <QuestionnaireProvider>
-        <Questionnaire />
-      </QuestionnaireProvider>
-    </MemoryRouter>
+    <QuestionnaireProvider>
+      <Questionnaire
+        onBackToStart={props.onBackToStart ?? (() => {})}
+        onShowResults={props.onShowResults ?? (() => {})}
+        {...props}
+      />
+    </QuestionnaireProvider>
   );
 }
 

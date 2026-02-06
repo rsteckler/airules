@@ -1,9 +1,6 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
-export function Welcome() {
-  const navigate = useNavigate();
-
+export function Welcome({ onStartQuestionnaire }) {
   return (
     <main className="page page--welcome">
       <div className="welcome-card">
@@ -13,7 +10,7 @@ export function Welcome() {
           Answer a short questionnaire about your stack and preferences. We’ll generate a rules file
           for Cursor, Claude, or a generic format.
         </p>
-        <button type="button" className="welcome-card__cta" onClick={() => navigate('/questionnaire')}>
+        <button type="button" className="welcome-card__cta" onClick={onStartQuestionnaire}>
           Start questionnaire
         </button>
       </div>

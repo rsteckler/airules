@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useState } from 'react';
 
 /**
  * Answers shape aligned with plan §10:
@@ -27,9 +27,6 @@ function questionnaireReducer(state, action) {
   switch (action.type) {
     case 'SET_ANSWER': {
       const { questionId, value } = action.payload;
-      if (questionId === 'staticSite' || questionId === 'docsSite') {
-        return { ...state, [questionId]: value };
-      }
       return { ...state, [questionId]: value };
     }
     case 'SET_OTHER': {
@@ -48,17 +45,39 @@ function questionnaireReducer(state, action) {
     }
     case 'RESET':
       return initialState;
+    case 'RESTORE':
+      return { ...initialState, ...action.payload };
     default:
       return state;
   }
+}
+
+const SESSION_STORAGE_KEY = 'airules_session_id';
+
+function getStoredSessionId() {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem(SESSION_STORAGE_KEY);
+}
+
+function setStoredSessionId(id) {
+  if (typeof window === 'undefined') return;
+  if (id) localStorage.setItem(SESSION_STORAGE_KEY, id);
+  else localStorage.removeItem(SESSION_STORAGE_KEY);
 }
 
 const QuestionnaireContext = createContext(null);
 
 export function QuestionnaireProvider({ children }) {
   const [state, dispatch] = useReducer(questionnaireReducer, initialState);
+  const [sessionId, setSessionIdState] = useState(() => getStoredSessionId());
+
+  const setSessionId = (id) => {
+    setSessionIdState(id);
+    setStoredSessionId(id);
+  };
+
   return (
-    <QuestionnaireContext.Provider value={{ answers: state, dispatch }}>
+    <QuestionnaireContext.Provider value={{ answers: state, dispatch, sessionId, setSessionId }}>
       {children}
     </QuestionnaireContext.Provider>
   );

@@ -1,15 +1,41 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { getVisibleQuestionIds } from '../data/questions';
 import { useQuestionnaire } from '../context/QuestionnaireContext';
 import { StepIndicator } from '../components/StepIndicator';
 import { QuestionStep } from '../components/QuestionStep';
+import { createSession, getSession, updateSession } from '../api/client';
 
-export function Questionnaire() {
-  const navigate = useNavigate();
-  const { answers } = useQuestionnaire();
+export function Questionnaire({ onBackToStart, onShowResults }) {
+  const { answers, dispatch, sessionId, setSessionId } = useQuestionnaire();
   const visibleIds = useMemo(() => getVisibleQuestionIds(answers), [answers]);
   const [stepIndex, setStepIndex] = useState(0);
+  const initDone = useRef(false);
+
+  // Ensure we have a session: create or rehydrate from stored session id
+  useEffect(() => {
+    if (initDone.current) return;
+    initDone.current = true;
+
+    if (sessionId) {
+      getSession(sessionId)
+        .then((session) => {
+          if (session.answers) dispatch({ type: 'RESTORE', payload: session.answers });
+        })
+        .catch(() => {
+          setSessionId(null);
+          initDone.current = false;
+        });
+      return;
+    }
+
+    createSession()
+      .then(({ id }) => {
+        setSessionId(id);
+      })
+      .catch(() => {
+        initDone.current = false;
+      });
+  }, [sessionId, setSessionId, dispatch]);
 
   // If visible steps shrink (e.g. user went back and changed project type), clamp step index
   useEffect(() => {
@@ -23,14 +49,28 @@ export function Questionnaire() {
   const isFirst = stepIndex === 0;
   const isLast = stepIndex === totalSteps - 1;
 
+  const persistAnswers = () => {
+    if (!sessionId) return;
+    updateSession(sessionId, { answers }).catch(() => {});
+  };
+
   const goBack = () => {
-    if (isFirst) navigate('/');
-    else setStepIndex((i) => i - 1);
+    persistAnswers();
+    if (isFirst) {
+      onBackToStart();
+      return;
+    }
+    setStepIndex((i) => i - 1);
   };
 
   const goNext = () => {
-    if (isLast) navigate('/results');
-    else setStepIndex((i) => i + 1);
+    if (isLast) {
+      persistAnswers();
+      onShowResults();
+      return;
+    }
+    persistAnswers();
+    setStepIndex((i) => i + 1);
   };
 
   if (totalSteps === 0) {
