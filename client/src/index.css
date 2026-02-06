@@ -97,7 +97,7 @@ select {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  pointer-events: none;
+  cursor: pointer;
 }
 
 .site-header__orb {
@@ -483,7 +483,6 @@ select {
   height: 6px;
   background: rgba(255, 255, 255, 0.12);
   border-radius: 3px;
-  overflow: hidden;
 }
 
 .step-indicator__bar {
@@ -491,6 +490,7 @@ select {
   background: var(--color-primary);
   border-radius: 3px;
   transition: width 0.2s ease;
+  box-shadow: 0 0 6px var(--color-primary), 0 0 12px var(--color-primary);
 }
 
 /* Questionnaire stack – cards stack up, no scroll; past cards recede */
@@ -570,6 +570,10 @@ select {
   animation: questionnaire-card-fade-in 0.35s ease forwards;
 }
 
+.questionnaire-step-slot:not(.questionnaire-step-slot--past):not(.questionnaire-step-slot--exiting):not(.questionnaire-step-slot--returned-from-back) .results-card {
+  animation: questionnaire-card-fade-in 0.35s ease forwards;
+}
+
 @keyframes questionnaire-card-fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -577,7 +581,8 @@ select {
 
 /* Current card fades out when going back */
 .questionnaire-step-slot--exiting .question-step,
-.questionnaire-step-slot--exiting .questionnaire-intro-wrap {
+.questionnaire-step-slot--exiting .questionnaire-intro-wrap,
+.questionnaire-step-slot--exiting .results-card {
   animation: questionnaire-card-fade-out 0.3s ease forwards;
 }
 
@@ -603,6 +608,18 @@ select {
   transform: translateY(calc(var(--stack-offset, 0) * -40px)) scale(calc(1 - var(--stack-offset, 0) * 0.12));
   /* Intro fades out as soon as the first card moves back */
   opacity: calc(1 - var(--stack-offset, 0));
+}
+
+/* Results card in stack recedes like question steps */
+.questionnaire-step-slot .results-card {
+  transition: box-shadow 0.4s ease, transform 0.4s ease, opacity 0.4s ease;
+  transform-origin: center top;
+}
+
+.questionnaire-step-slot--past .results-card {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  transform: translateY(calc(var(--stack-offset, 0) * -40px)) scale(calc(1 - var(--stack-offset, 0) * 0.12));
+  opacity: calc(1 - var(--stack-offset, 0) * 0.12);
 }
 
 .question-step__title {
@@ -817,8 +834,14 @@ select {
 
 .results-back {
   padding: 0.5rem 0;
-  color: #60a5fa;
+  font-size: 0.875rem;
+  color: #fff;
   background: none;
   border: none;
   text-decoration: underline;
+  cursor: pointer;
+}
+
+.results-back:hover {
+  color: #e8e8e8;
 }

@@ -20,13 +20,13 @@ describe('Questionnaire page', () => {
   it('shows first step (project type)', () => {
     renderQuestionnaire();
     expect(screen.getByRole('heading', { name: /what type of project/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /back to start/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /back/i })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: /^next$/i })).toBeInTheDocument();
   });
 
-  it('shows step indicator', () => {
+  it('shows step indicator (progress bar)', () => {
     renderQuestionnaire();
-    expect(screen.getByText(/step 1 of/i)).toBeInTheDocument();
+    expect(screen.getByRole('progressbar', { name: /step 1 of/i })).toBeInTheDocument();
   });
 
   it('after selecting Backend only, next step is backend tech (not frontend)', async () => {
@@ -53,6 +53,7 @@ describe('Questionnaire page', () => {
     await user.click(screen.getByRole('button', { name: /^next$/i }));
     expect(screen.getByRole('heading', { name: /backend technologies/i })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /^back$/i }));
-    expect(screen.getByRole('heading', { name: /what type of project/i })).toBeInTheDocument();
+    const heading = await screen.findByRole('heading', { name: /what type of project/i }, { timeout: 500 });
+    expect(heading).toBeInTheDocument();
   });
 });

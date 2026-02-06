@@ -6,7 +6,6 @@ import { SiteHeader } from './components/SiteHeader';
 import { SiteFooter } from './components/SiteFooter';
 import { StarfieldBackground } from './components/StarfieldBackground';
 import { Questionnaire } from './pages/Questionnaire';
-import { Results } from './pages/Results';
 
 function App() {
   const [screen, setScreen] = useState('questionnaire');
@@ -28,11 +27,7 @@ function App() {
                     setStartAtStep(0);
                     setScreen('questionnaire');
                   }}
-                  onShowResults={() => setScreen('results')}
                 />
-              )}
-              {screen === 'results' && (
-                <Results onBackToQuestionnaire={() => setScreen('questionnaire')} />
               )}
             </div>
           </main>

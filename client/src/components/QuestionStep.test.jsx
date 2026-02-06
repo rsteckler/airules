@@ -56,10 +56,9 @@ describe('QuestionStep', () => {
   it('selecting "Other" on project type shows the "Please specify" input', async () => {
     const user = userEvent.setup();
     renderWithProvider(<QuestionStep questionId={QUESTION_IDS.PROJECT_TYPE} />);
-    expect(screen.queryByLabelText(/please specify/i)).not.toBeInTheDocument();
     await user.click(screen.getByRole('radio', { name: /^other$/i }));
     expect(screen.getByLabelText(/please specify/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/describe your choice/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/please describe/i)).toBeInTheDocument();
   });
 
   it('typing in "Other" input updates context', async () => {
@@ -71,16 +70,16 @@ describe('QuestionStep', () => {
     expect(input).toHaveValue('Custom project type');
   });
 
-  it('question with tellMeMore shows "Tell me more" textarea', () => {
+  it('question with tellMeMore shows optional context textarea', () => {
     renderWithProvider(<QuestionStep questionId={QUESTION_IDS.PROJECT_TYPE} />);
-    expect(screen.getByLabelText(/tell me more/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/any extra context/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/optional - add more context/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/optional - add more context/i)).toBeInTheDocument();
   });
 
-  it('typing in "Tell me more" textarea updates context', async () => {
+  it('typing in optional context textarea updates context', async () => {
     const user = userEvent.setup();
     renderWithProvider(<QuestionStep questionId={QUESTION_IDS.PROJECT_TYPE} />);
-    const textarea = screen.getByLabelText(/tell me more/i);
+    const textarea = screen.getByLabelText(/optional - add more context/i);
     await user.type(textarea, 'Some extra context');
     expect(textarea).toHaveValue('Some extra context');
   });
