@@ -3,6 +3,8 @@ import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import { sessionRoutes } from './routes/session.js';
+import { generateRulesRoutes } from './routes/generateRules.js';
+import { schemaRoutes } from './routes/schema.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const app = express();
@@ -15,7 +17,9 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.use('/api', schemaRoutes);
 app.use('/api', sessionRoutes);
+app.use('/api', generateRulesRoutes);
 
 export { app };
 

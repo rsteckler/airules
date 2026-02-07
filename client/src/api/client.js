@@ -64,4 +64,31 @@ export async function updateSession(id, body) {
   });
 }
 
+/**
+ * Fetch the questionnaire flow JSON (nodes, edges, options).
+ * @returns {Promise<object>}
+ */
+export async function getQuestionnaireFlow() {
+  return request('/api/questionnaire-flow');
+}
+
+/**
+ * @deprecated Use getQuestionnaireFlow() instead.
+ */
+export async function getQuestionnaireSchema() {
+  return request('/api/questionnaire-flow');
+}
+
+/**
+ * Generate rules. Pass either sessionId or answers.
+ * @param {{ sessionId?: string, answers?: object }} body
+ * @returns {Promise<{ content: string, filename: string }>}
+ */
+export async function generateRules(body) {
+  return request('/api/generate-rules', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+}
+
 export { getBaseUrl };

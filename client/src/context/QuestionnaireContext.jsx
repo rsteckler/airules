@@ -1,52 +1,40 @@
-import React, { createContext, useContext, useReducer, useState } from 'react';
+import React, { createContext, useContext, useReducer, useState, useCallback } from 'react';
 
 /**
- * Answers shape aligned with plan §10:
- * { projectType, frontendTech, backendTech, dataLayer, staticSite, docsSite, testFramework, testStrategy, favoriteAgent, otherFields, tellMeMore }
- * - Multi-select fields (frontendTech, backendTech, dataLayer, testFramework, testStrategy) are arrays of values.
- * - Yes/no + path (staticSite, docsSite) are { yes: boolean, path?: string }.
- * - otherFields[id] = custom string when user picks "Other".
- * - tellMeMore[id] = optional free text per question.
+ * Questionnaire context.
+ *
+ * Answers are a flat object keyed by questionId (stacks, web_language, etc.).
+ * Companion "other" fields (e.g. web_language_other_text) are stored as normal keys.
+ *
+ * Skipped questions are tracked in a separate Set. Skipping omits the question
+ * from the final results. Only non-required questions can be skipped.
  */
 
-const initialState = {
-  projectType: null,
-  frontendTech: [],
-  backendTech: [],
-  dataLayer: [],
-  staticSite: { yes: null, path: '' },
-  docsSite: { yes: null, path: '' },
-  testFramework: [],
-  testStrategy: [],
-  favoriteAgent: null,
-  otherFields: {},
-  tellMeMore: {},
-};
+const initialState = {};
 
 function questionnaireReducer(state, action) {
   switch (action.type) {
     case 'SET_ANSWER': {
-      const { questionId, value } = action.payload;
-      return { ...state, [questionId]: value };
+      const { fieldId, value } = action.payload;
+      return { ...state, [fieldId]: value };
     }
-    case 'SET_OTHER': {
-      const { questionId, text } = action.payload;
-      return {
-        ...state,
-        otherFields: { ...state.otherFields, [questionId]: text },
-      };
-    }
-    case 'SET_TELL_ME_MORE': {
-      const { questionId, text } = action.payload;
-      return {
-        ...state,
-        tellMeMore: { ...state.tellMeMore, [questionId]: text },
-      };
+    case 'DELETE_ANSWER': {
+      const { fieldId } = action.payload;
+      const next = { ...state };
+      delete next[fieldId];
+      // Also remove companion _other_text field
+      const companionKey = `${fieldId}_other_text`;
+      delete next[companionKey];
+      return next;
     }
     case 'RESET':
       return initialState;
     case 'RESTORE':
       return { ...initialState, ...action.payload };
+    case 'PRUNE': {
+      // Replace answers with a pruned copy (removes unreachable keys)
+      return { ...action.payload };
+    }
     default:
       return state;
   }
@@ -70,14 +58,37 @@ const QuestionnaireContext = createContext(null);
 export function QuestionnaireProvider({ children }) {
   const [state, dispatch] = useReducer(questionnaireReducer, initialState);
   const [sessionId, setSessionIdState] = useState(() => getStoredSessionId());
+  const [skipped, setSkipped] = useState(new Set());
 
   const setSessionId = (id) => {
     setSessionIdState(id);
     setStoredSessionId(id);
   };
 
+  const skipQuestion = useCallback((questionId) => {
+    dispatch({ type: 'DELETE_ANSWER', payload: { fieldId: questionId } });
+    setSkipped((prev) => {
+      const next = new Set(prev);
+      next.add(questionId);
+      return next;
+    });
+  }, []);
+
+  const unskipQuestion = useCallback((questionId) => {
+    setSkipped((prev) => {
+      if (!prev.has(questionId)) return prev;
+      const next = new Set(prev);
+      next.delete(questionId);
+      return next;
+    });
+  }, []);
+
+  const resetSkipped = useCallback(() => setSkipped(new Set()), []);
+
   return (
-    <QuestionnaireContext.Provider value={{ answers: state, dispatch, sessionId, setSessionId }}>
+    <QuestionnaireContext.Provider
+      value={{ answers: state, dispatch, sessionId, setSessionId, skipped, skipQuestion, unskipQuestion, resetSkipped }}
+    >
       {children}
     </QuestionnaireContext.Provider>
   );

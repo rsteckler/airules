@@ -4,9 +4,13 @@
   "description": "AI Rules Generator – questionnaire and rules generation for Cursor, Claude, etc.",
   "workspaces": ["client", "server"],
   "scripts": {
-    "install:all": "npm install",
-    "test": "npm run test --workspaces --if-present"
+    "install:all": "pnpm install",
+    "test": "pnpm -r run test",
+    "dev:client": "pnpm --filter airules-client run dev",
+    "dev:server": "pnpm --filter airules-server run dev",
+    "dev:flow": "pnpm --filter airules-flow run dev"
   },
+  "packageManager": "pnpm@9.15.0",
   "engines": {
     "node": ">=18"
   }

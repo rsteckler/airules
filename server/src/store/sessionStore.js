@@ -30,19 +30,7 @@ export function updateSession(id, updates) {
 }
 
 function getEmptyAnswers() {
-  return {
-    projectType: null,
-    frontendTech: [],
-    backendTech: [],
-    dataLayer: [],
-    staticSite: { yes: null, path: '' },
-    docsSite: { yes: null, path: '' },
-    testFramework: [],
-    testStrategy: [],
-    favoriteAgent: null,
-    otherFields: {},
-    tellMeMore: {},
-  };
+  return {};
 }
 
 /** Clear all sessions (for tests only). */

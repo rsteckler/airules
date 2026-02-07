@@ -1,26 +1,91 @@
-import React, { useMemo, useState, useEffect, useRef } from 'react';
-import { getVisibleQuestionIds } from '../data/questions';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useQuestionnaire } from '../context/QuestionnaireContext';
 import { StepIndicator } from '../components/StepIndicator';
-import { QuestionStep } from '../components/QuestionStep';
+import { FlowQuestionStep } from '../components/FlowQuestionStep';
 import { ResultsCard, RESULTS_STEP_ID } from './Results';
-import { createSession, getSession, updateSession } from '../api/client';
+import { getQuestionnaireFlow, createSession, getSession, updateSession } from '../api/client';
+import {
+  buildGraphMaps,
+  computeTraversalOrder,
+  getFullReachableNodes,
+  pruneAnswers,
+  isNodeComplete,
+} from '../engine/traversal.js';
+import { validateNode } from '../engine/validator.js';
 
 export function Questionnaire({ onBackToStart, initialStepIndex = 0 }) {
-  const { answers, dispatch, sessionId, setSessionId } = useQuestionnaire();
-  const visibleIds = useMemo(() => getVisibleQuestionIds(answers), [answers]);
+  const { answers, dispatch, sessionId, setSessionId, skipped, skipQuestion, unskipQuestion, resetSkipped } = useQuestionnaire();
+
+  // Flow data from server
+  const [flowData, setFlowData] = useState(null);
+  const [flowError, setFlowError] = useState(null);
+
+  // Navigation state
   const [stepIndex, setStepIndex] = useState(initialStepIndex);
+  const [validationError, setValidationError] = useState(null);
+
+  // Session init guard
   const initDone = useRef(false);
 
-  // Ensure we have a session: create or rehydrate from stored session id
+  // Animation state
+  const stackContainerRef = useRef(null);
+  const [isExiting, setIsExiting] = useState(false);
+  const [returnedFromBack, setReturnedFromBack] = useState(false);
+  const exitTimeoutRef = useRef(null);
+
+  // ── Precomputed graph maps ──────────────────────────────────────
+  const maps = useMemo(() => {
+    if (!flowData) return null;
+    return buildGraphMaps(flowData);
+  }, [flowData]);
+
+  // ── DFS traversal order ─────────────────────────────────────────
+  const traversalOrder = useMemo(() => {
+    if (!flowData || !maps) return [];
+    return computeTraversalOrder(flowData.rootId, answers, flowData, maps, skipped);
+  }, [flowData, maps, answers, skipped]);
+
+  // Total steps = traversal nodes + 1 for results
+  const totalSteps = traversalOrder.length + 1;
+  const isFirst = stepIndex === 0;
+  const isLast = stepIndex === traversalOrder.length; // results card
+  const isOnLastQuestion = stepIndex === traversalOrder.length - 1;
+
+  // Current node
+  const currentNodeId = traversalOrder[stepIndex];
+  const currentNode = currentNodeId ? maps?.nodesById.get(currentNodeId) : null;
+  const currentNodeData = currentNode?.data;
+  const currentOptions = currentNodeData
+    ? (flowData?.options?.[currentNodeData.questionId] ?? [])
+    : [];
+
+  // Build stackIds for the card stack animation
+  const stackIds = useMemo(() => {
+    if (stepIndex < traversalOrder.length) {
+      return traversalOrder.slice(0, stepIndex + 1);
+    }
+    return [...traversalOrder, RESULTS_STEP_ID];
+  }, [traversalOrder, stepIndex]);
+
+  // ── Fetch flow data ─────────────────────────────────────────────
   useEffect(() => {
-    if (initDone.current) return;
+    getQuestionnaireFlow()
+      .then(setFlowData)
+      .catch((err) => setFlowError(err?.message || 'Failed to load questionnaire'));
+  }, []);
+
+  // ── Session init ────────────────────────────────────────────────
+  useEffect(() => {
+    if (!flowData || initDone.current) return;
     initDone.current = true;
 
     if (sessionId) {
       getSession(sessionId)
         .then((session) => {
-          if (session.answers) dispatch({ type: 'RESTORE', payload: session.answers });
+          if (session.answers && Object.keys(session.answers).length > 0) {
+            dispatch({ type: 'RESTORE', payload: session.answers });
+          }
+          // Don't apply defaults — answers start empty, defaults shown in UI
         })
         .catch(() => {
           setSessionId(null);
@@ -30,31 +95,18 @@ export function Questionnaire({ onBackToStart, initialStepIndex = 0 }) {
     }
 
     createSession()
-      .then(({ id }) => {
-        setSessionId(id);
-      })
-      .catch(() => {
-        initDone.current = false;
-      });
-  }, [sessionId, setSessionId, dispatch]);
+      .then(({ id }) => setSessionId(id))
+      .catch(() => { initDone.current = false; });
+  }, [flowData, sessionId, setSessionId, dispatch]);
 
-  // If visible steps shrink, clamp step index (stepIndex can be 0..visibleIds.length for results)
+  // ── Clamp step index if traversal order changes ─────────────────
   useEffect(() => {
-    if (stepIndex > visibleIds.length && visibleIds.length > 0) {
-      setStepIndex(visibleIds.length);
+    if (traversalOrder.length > 0 && stepIndex > traversalOrder.length) {
+      setStepIndex(traversalOrder.length);
     }
-  }, [visibleIds.length, stepIndex]);
+  }, [traversalOrder.length, stepIndex]);
 
-  const totalSteps = visibleIds.length + 1; // questions + results card
-  const isFirst = stepIndex === 0;
-  const isLast = stepIndex === visibleIds.length; // on results card
-  const isOnLastQuestion = stepIndex === visibleIds.length - 1;
-  const stackContainerRef = useRef(null);
-  const [isExiting, setIsExiting] = useState(false);
-  const [returnedFromBack, setReturnedFromBack] = useState(false);
-  const exitTimeoutRef = useRef(null);
-
-  // Expose stack height as CSS var so slots fill the view
+  // ── Resize observer for stack animation ─────────────────────────
   useEffect(() => {
     const el = stackContainerRef.current;
     if (!el) return;
@@ -67,21 +119,61 @@ export function Questionnaire({ onBackToStart, initialStepIndex = 0 }) {
     return () => ro.disconnect();
   }, []);
 
+  // Cleanup exit timeout
   useEffect(() => () => {
     if (exitTimeoutRef.current) clearTimeout(exitTimeoutRef.current);
   }, []);
 
-  // Only show current + past (stack builds up); results is the final card
-  const stackIds =
-    stepIndex < visibleIds.length
-      ? visibleIds.slice(0, stepIndex + 1)
-      : [...visibleIds, RESULTS_STEP_ID];
+  // ── Clear validation error when answer changes ──────────────────
+  useEffect(() => {
+    if (validationError && currentNodeData) {
+      const qId = currentNodeData.questionId;
+      const answer = answers[qId];
+      if (answer !== undefined && answer !== null) {
+        setValidationError(null);
+      }
+    }
+  }, [answers, validationError, currentNodeData]);
 
-  const persistAnswers = () => {
+  // ── Apply default when visiting a node for the first time ───────
+  useEffect(() => {
+    if (!currentNodeData || !flowData) return;
+    const { questionId, defaultValue } = currentNodeData;
+    // Don't apply default for skipped questions
+    if (skipped.has(questionId)) return;
+    // Only apply default if the user hasn't answered this question yet
+    if (answers[questionId] === undefined && defaultValue !== undefined) {
+      dispatch({ type: 'SET_ANSWER', payload: { fieldId: questionId, value: defaultValue } });
+    }
+  }, [currentNodeData, flowData, answers, dispatch, skipped]);
+
+  // ── Auto-unskip when user answers a skipped question ────────────
+  useEffect(() => {
+    if (!currentNodeData) return;
+    const qId = currentNodeData.questionId;
+    if (skipped.has(qId) && answers[qId] !== undefined && answers[qId] !== null) {
+      unskipQuestion(qId);
+    }
+  }, [answers, currentNodeData, skipped, unskipQuestion]);
+
+  // ── Prune unreachable answers on answer change ──────────────────
+  const pruneIfNeeded = useCallback(() => {
+    if (!flowData || !maps) return;
+    const reachable = getFullReachableNodes(flowData.rootId, answers, flowData, maps);
+    const pruned = pruneAnswers(answers, reachable, flowData, maps);
+    // Only dispatch if keys were actually removed
+    if (Object.keys(pruned).length < Object.keys(answers).length) {
+      dispatch({ type: 'PRUNE', payload: pruned });
+    }
+  }, [flowData, maps, answers, dispatch]);
+
+  // ── Persist answers to server ───────────────────────────────────
+  const persistAnswers = useCallback(() => {
     if (!sessionId) return;
     updateSession(sessionId, { answers }).catch(() => {});
-  };
+  }, [sessionId, answers]);
 
+  // ── Navigation ──────────────────────────────────────────────────
   const goBack = () => {
     persistAnswers();
     if (isFirst) {
@@ -100,26 +192,63 @@ export function Questionnaire({ onBackToStart, initialStepIndex = 0 }) {
   };
 
   const goNext = () => {
+    // Validate current node before advancing
+    if (currentNodeData && flowData) {
+      const result = validateNode(currentNodeData, answers, currentOptions);
+      if (!result.valid) {
+        setValidationError(result.error);
+        return;
+      }
+    }
+
+    setValidationError(null);
     setReturnedFromBack(false);
     persistAnswers();
-    if (isOnLastQuestion) {
-      setStepIndex(visibleIds.length); // go to results card
+    pruneIfNeeded();
+
+    if (isOnLastQuestion || stepIndex >= traversalOrder.length - 1) {
+      setStepIndex(traversalOrder.length);
       return;
     }
     setStepIndex((i) => i + 1);
   };
 
   const handleSkip = () => {
+    // Skip removes the answer and marks the question as skipped
+    if (currentNodeData) {
+      skipQuestion(currentNodeData.questionId);
+    }
+
+    setValidationError(null);
     setReturnedFromBack(false);
     persistAnswers();
-    if (isOnLastQuestion) {
-      setStepIndex(visibleIds.length);
+    pruneIfNeeded();
+
+    if (isOnLastQuestion || stepIndex >= traversalOrder.length - 1) {
+      setStepIndex(traversalOrder.length);
       return;
     }
     setStepIndex((i) => i + 1);
   };
 
-  if (visibleIds.length === 0) {
+  const handleStartOver = () => {
+    persistAnswers();
+    setValidationError(null);
+    setReturnedFromBack(false);
+    resetSkipped();
+    setStepIndex(0);
+  };
+
+  // ── Loading / error states ──────────────────────────────────────
+  if (flowError) {
+    return (
+      <main className="page page--questionnaire">
+        <p className="questionnaire-error" role="alert">{flowError}</p>
+      </main>
+    );
+  }
+
+  if (!flowData || traversalOrder.length === 0) {
     return (
       <main className="page page--questionnaire">
         <p>Loading…</p>
@@ -127,37 +256,55 @@ export function Questionnaire({ onBackToStart, initialStepIndex = 0 }) {
     );
   }
 
+  // ── Render ──────────────────────────────────────────────────────
   return (
     <main className="page page--questionnaire">
       <StepIndicator currentStep={isExiting ? stepIndex - 1 : stepIndex} totalSteps={totalSteps} />
       <div className="questionnaire-stack" ref={stackContainerRef} role="region" aria-label="Questions">
         <div className="questionnaire-steps">
-          {stackIds.map((id, i) => (
-            <div
-              key={id}
-              className={`questionnaire-step-slot${i < stepIndex ? ' questionnaire-step-slot--past' : ''}${i === stepIndex && isExiting ? ' questionnaire-step-slot--exiting' : ''}${i === stepIndex && returnedFromBack ? ' questionnaire-step-slot--returned-from-back' : ''}`}
-              style={{
-                zIndex: i,
-                '--stack-offset': isExiting ? Math.max(0, stepIndex - 1 - i) : stepIndex - i,
-              }}
-              aria-hidden={i !== stepIndex}
-            >
-              {i === 0 && id !== RESULTS_STEP_ID && (
-                <div className="questionnaire-intro-wrap">
-                  <p className="questionnaire-intro">
-                    Get better results from your coding agent by creating a rules file that ensures the agent
-                    follows best practices tailored to your repository, the stack you use, and your own
-                    developer preferences.
-                  </p>
-                </div>
-              )}
-              {id === RESULTS_STEP_ID ? (
-                <ResultsCard onBackToQuestionnaire={goBack} />
-              ) : (
-                <QuestionStep questionId={id} onSkip={handleSkip} skipInNav />
-              )}
-            </div>
-          ))}
+          {stackIds.map((id, i) => {
+            const node = maps?.nodesById.get(id);
+            const nodeData = node?.data;
+            const optionsList = nodeData ? (flowData.options?.[nodeData.questionId] ?? []) : [];
+
+            return (
+              <div
+                key={id}
+                className={`questionnaire-step-slot${i < stepIndex ? ' questionnaire-step-slot--past' : ''}${i === stepIndex && isExiting ? ' questionnaire-step-slot--exiting' : ''}${i === stepIndex && returnedFromBack ? ' questionnaire-step-slot--returned-from-back' : ''}${id === RESULTS_STEP_ID ? ' questionnaire-step-slot--results' : ''}`}
+                style={{
+                  zIndex: i,
+                  '--stack-offset': isExiting ? Math.max(0, stepIndex - 1 - i) : stepIndex - i,
+                }}
+                aria-hidden={i !== stepIndex}
+              >
+                {i === 0 && id !== RESULTS_STEP_ID && (
+                  <div className="questionnaire-intro-wrap">
+                    <p className="questionnaire-intro">
+                      Get better results from your coding agent by creating a rules file that ensures the agent
+                      follows best practices tailored to your repository, the stack you use, and your own
+                      developer preferences.
+                    </p>
+                  </div>
+                )}
+                {id === RESULTS_STEP_ID ? (
+                  <ResultsCard
+                    onBackToQuestionnaire={handleStartOver}
+                    flowData={flowData}
+                    skipped={skipped}
+                    traversalOrder={traversalOrder}
+                  />
+                ) : (
+                  <FlowQuestionStep
+                    nodeData={nodeData}
+                    optionsList={optionsList}
+                    validationError={i === stepIndex ? validationError : null}
+                    onSkip={i === stepIndex ? handleSkip : undefined}
+                    canSkip={!nodeData?.validation?.required}
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
       <div className="questionnaire-nav">
@@ -174,23 +321,18 @@ export function Questionnaire({ onBackToStart, initialStepIndex = 0 }) {
           </button>
         )}
         <div className="questionnaire-nav__center">
-          {!isLast && handleSkip && (
-            <button type="button" className="questionnaire-nav__skip" onClick={handleSkip}>
-              Skip this question
-            </button>
-          )}
         </div>
         {!isLast && (
-        <button
-          type="button"
-          className="questionnaire-nav__next"
-          onClick={goNext}
-          aria-label={isOnLastQuestion ? 'Generate rules' : 'Next'}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
+          <button
+            type="button"
+            className="questionnaire-nav__next"
+            onClick={goNext}
+            aria-label={isOnLastQuestion ? 'Generate rules' : 'Next'}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
         )}
       </div>
     </main>

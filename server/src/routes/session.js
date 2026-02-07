@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { createSession, getSession, updateSession } from '../store/sessionStore.js';
+import { validateAnswers } from '../schema/validate.js';
 
 export const sessionRoutes = Router();
 
@@ -19,11 +20,18 @@ sessionRoutes.get('/session/:id', (req, res) => {
   res.json(session);
 });
 
-// PATCH /api/session/:id — update answers (and optionally repoAnalysis)
+// PATCH /api/session/:id — update answers (and optionally repoAnalysis). Validates answers.
 sessionRoutes.patch('/session/:id', (req, res) => {
-  const session = updateSession(req.params.id, req.body);
+  const session = getSession(req.params.id);
   if (!session) {
     return res.status(404).json({ error: 'Session not found' });
   }
-  res.json(session);
+  if (req.body.answers !== undefined) {
+    const { valid, errors } = validateAnswers(req.body.answers);
+    if (!valid) {
+      return res.status(400).json({ error: 'Validation failed', errors });
+    }
+  }
+  const updated = updateSession(req.params.id, req.body);
+  res.json(updated);
 });

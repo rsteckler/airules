@@ -1,0 +1,564 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 14px;
+  background: #1a1b1e;
+  color: #e4e4e7;
+}
+
+/* App */
+.flow-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.flow-header {
+  flex-shrink: 0;
+  padding: 12px 20px;
+  background: #25262b;
+  border-bottom: 1px solid #373a40;
+}
+
+.flow-header h1 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.flow-header p {
+  margin: 0;
+  font-size: 12px;
+  color: #868e96;
+}
+
+/* Layout */
+.flow-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.flow-canvas-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.flow-sidebar {
+  width: 320px;
+  min-width: 320px;
+  background: #25262b;
+  border-left: 1px solid #373a40;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* React Flow overrides */
+.flow-canvas-wrap .react-flow__attribution {
+  display: none;
+}
+
+.flow-canvas-wrap .react-flow__controls {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.flow-canvas-wrap .react-flow__controls-button {
+  background: #25262b;
+  color: #e4e4e7;
+  border-color: #373a40;
+}
+
+.flow-canvas-wrap .react-flow__controls-button:hover {
+  background: #373a40;
+}
+
+/* Nodes */
+.flow-node {
+  padding: 10px 14px;
+  border-radius: 8px;
+  min-width: 120px;
+  text-align: center;
+  border: 1px solid #373a40;
+  background: #25262b;
+}
+
+.flow-node.selected {
+  border-color: #4dabf7;
+  box-shadow: 0 0 0 1px #4dabf7;
+}
+
+.flow-node-default {
+  border-left: 3px solid #4dabf7;
+}
+
+.flow-node-branch {
+  border-left: 3px solid #da77f2;
+}
+
+.flow-node-label {
+  font-weight: 600;
+  margin: 0 4px;
+}
+
+.flow-node-meta-badge {
+  font-size: 10px;
+  color: #868e96;
+  margin-top: 4px;
+}
+
+.flow-node-branch-handles {
+  position: relative;
+  height: 12px;
+  margin-top: 6px;
+}
+
+.flow-handle-wrap {
+  position: absolute;
+  transform: translate(-50%, 0);
+  bottom: 0;
+}
+
+.flow-node-branch-labels {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 2px;
+  font-size: 11px;
+  color: #868e96;
+}
+
+.flow-branch-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+.flow-handle {
+  width: 10px;
+  height: 10px;
+  background: #4dabf7;
+  border: 2px solid #25262b;
+}
+
+.flow-handle-branch {
+  background: #da77f2;
+}
+
+.flow-node-toolbar-label {
+  font-size: 11px;
+  color: #868e96;
+}
+
+/* Toolbar */
+.flow-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  background: #25262b;
+  border: 1px solid #373a40;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.flow-toolbar-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.flow-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #373a40;
+  background: #373a40;
+  color: #e4e4e7;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.flow-btn:hover {
+  background: #495057;
+  border-color: #495057;
+}
+
+.flow-btn-primary {
+  background: #339af0;
+  border-color: #339af0;
+}
+
+.flow-btn-primary:hover {
+  background: #228be6;
+  border-color: #228be6;
+}
+
+.flow-btn-danger {
+  background: #c92a2a;
+  border-color: #c92a2a;
+}
+
+.flow-btn-danger:hover {
+  background: #b02a2a;
+  border-color: #b02a2a;
+}
+
+.flow-btn-sm {
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+.flow-file-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Node editor */
+.flow-node-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.flow-node-editor-empty {
+  color: #868e96;
+}
+
+.flow-node-editor-empty p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.flow-node-editor-title {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #adb5bd;
+}
+
+.flow-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flow-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #adb5bd;
+}
+
+.flow-field input[type="text"] {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #373a40;
+  background: #1a1b1e;
+  color: #e4e4e7;
+  font-size: 13px;
+}
+
+.flow-field input:focus {
+  outline: none;
+  border-color: #4dabf7;
+}
+
+.flow-hint {
+  margin: 0;
+  font-size: 11px;
+  color: #868e96;
+}
+
+.flow-meta-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.flow-meta-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: #1a1b1e;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.flow-meta-kv {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flow-meta-add {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.flow-meta-add input {
+  flex: 1;
+  min-width: 0;
+}
+
+.flow-branches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flow-branch-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.flow-branch-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Question node */
+.flow-node-question {
+  border-left: 3px solid #51cf66;
+  min-width: 140px;
+}
+
+.flow-node-question-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 11px;
+}
+
+.flow-node-question-id {
+  color: #868e96;
+  font-family: monospace;
+  font-size: 10px;
+}
+
+.flow-node-control-badge {
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.flow-node-control-badge--single {
+  background: #364fc7;
+  color: #dbe4ff;
+}
+
+.flow-node-control-badge--multi {
+  background: #5f3dc4;
+  color: #e5dbff;
+}
+
+.flow-node-option-count {
+  font-size: 10px;
+  color: #868e96;
+  margin-top: 2px;
+}
+
+.flow-btn-question {
+  background: #2b8a3e;
+  border-color: #2b8a3e;
+}
+
+.flow-btn-question:hover {
+  background: #237032;
+  border-color: #237032;
+}
+
+/* Sidebar tabs */
+.flow-sidebar-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #373a40;
+}
+
+.flow-sidebar-tab {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: #868e96;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+}
+
+.flow-sidebar-tab.active {
+  color: #e4e4e7;
+  border-bottom-color: #4dabf7;
+}
+
+.flow-sidebar-tab:hover {
+  color: #e4e4e7;
+}
+
+/* Edge editor */
+.flow-edge-endpoints {
+  font-family: monospace;
+  font-size: 12px;
+  color: #adb5bd;
+}
+
+.flow-textarea {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #373a40;
+  background: #1a1b1e;
+  color: #e4e4e7;
+  font-family: monospace;
+  font-size: 12px;
+  resize: vertical;
+}
+
+.flow-textarea:focus {
+  outline: none;
+  border-color: #4dabf7;
+}
+
+.flow-select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #373a40;
+  background: #1a1b1e;
+  color: #e4e4e7;
+  font-size: 13px;
+}
+
+.flow-select:focus {
+  outline: none;
+  border-color: #4dabf7;
+}
+
+.flow-select-sm {
+  padding: 4px 6px;
+  font-size: 11px;
+  min-width: 70px;
+}
+
+.flow-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #e4e4e7;
+  cursor: pointer;
+}
+
+.flow-field-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.flow-field-inline label {
+  font-size: 12px;
+  min-width: 60px;
+}
+
+.flow-field input[type="number"] {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #373a40;
+  background: #1a1b1e;
+  color: #e4e4e7;
+  font-size: 13px;
+  width: 80px;
+}
+
+.flow-field input[type="number"]:focus {
+  outline: none;
+  border-color: #4dabf7;
+}
+
+/* Options panel */
+.flow-options-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.flow-options-qid-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.flow-options-qid-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: #1a1b1e;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.flow-options-qid-item.active {
+  background: #364fc7;
+}
+
+.flow-options-qid-item:hover:not(.active) {
+  background: #2c2e33;
+}
+
+.flow-options-qid-count {
+  color: #868e96;
+  margin-left: auto;
+  font-size: 11px;
+}
+
+.flow-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.flow-option-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.flow-option-input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #373a40;
+  background: #1a1b1e;
+  color: #e4e4e7;
+  font-size: 12px;
+}
+
+.flow-option-input:focus {
+  outline: none;
+  border-color: #4dabf7;
+}

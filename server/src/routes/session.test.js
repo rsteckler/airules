@@ -26,12 +26,13 @@ describe('session API', () => {
     });
 
     it('accepts initial answers', async () => {
+      const validAnswers = validMinimalAnswers();
       const res = await request(app)
         .post('/api/session')
-        .send({ answers: { projectType: 'fe' } });
+        .send({ answers: validAnswers });
       expect(res.status).toBe(201);
       const getRes = await request(app).get(`/api/session/${res.body.id}`);
-      expect(getRes.body.answers.projectType).toBe('fe');
+      expect(getRes.body.answers.stacks).toEqual(validAnswers.stacks);
     });
   });
 
@@ -46,8 +47,6 @@ describe('session API', () => {
         answers: expect.any(Object),
         createdAt: expect.any(String),
       });
-      expect(res.body.answers).toHaveProperty('projectType');
-      expect(res.body.answers).toHaveProperty('frontendTech');
     });
 
     it('returns 404 when session not found', async () => {
@@ -61,24 +60,55 @@ describe('session API', () => {
     it('updates answers and returns session', async () => {
       const createRes = await request(app).post('/api/session').send({});
       const id = createRes.body.id;
+      const answers = validMinimalAnswers();
       const res = await request(app)
         .patch(`/api/session/${id}`)
-        .send({ answers: { projectType: 'fullstack', frontendTech: ['react'] } });
+        .send({ answers });
       expect(res.status).toBe(200);
-      expect(res.body.answers.projectType).toBe('fullstack');
-      expect(res.body.answers.frontendTech).toEqual(['react']);
+      expect(res.body.answers.stacks).toEqual(['web', 'server', 'tests']);
+    });
 
-      const getRes = await request(app).get(`/api/session/${id}`);
-      expect(getRes.body.answers.projectType).toBe('fullstack');
-      expect(getRes.body.answers.frontendTech).toEqual(['react']);
+    it('returns 400 when answers fail validation', async () => {
+      const createRes = await request(app).post('/api/session').send({});
+      const id = createRes.body.id;
+      // stacks with invalid enum value
+      const res = await request(app)
+        .patch(`/api/session/${id}`)
+        .send({ answers: { stacks: ['invalid_enum'] } });
+      expect(res.status).toBe(400);
+      expect(res.body.error).toBe('Validation failed');
+      expect(Array.isArray(res.body.errors)).toBe(true);
     });
 
     it('returns 404 when session not found', async () => {
       const res = await request(app)
         .patch('/api/session/non-existent-id')
-        .send({ answers: { projectType: 'fe' } });
+        .send({ answers: validMinimalAnswers() });
       expect(res.status).toBe(404);
       expect(res.body.error).toBe('Session not found');
     });
   });
 });
+
+/**
+ * Valid answers for all reachable required nodes when stacks = ['web', 'server', 'tests'].
+ * Must include answers for every reachable node with `validation.required: true`.
+ */
+function validMinimalAnswers() {
+  return {
+    stacks: ['web', 'server', 'tests'],
+    web_language: ['typescript'],
+    web_frameworks: ['react'],
+    server_language: ['typescript'],
+    package_manager: 'pnpm',
+    ai_permissions: ['create_files', 'edit_files'],
+    always_ask_before: ['add_dependencies'],
+    when_run_checks: 'after_meaningful_changes',
+    git_behavior: 'push_when_asked',
+    documentation_expectations: 'update_when_behavior_changes',
+    security_posture: 'standard',
+    output_preference: 'code_plus_brief',
+    uncertainty_handling: 'ask_one_question_then_proceed',
+    rules_file_structure: 'split_cursor_rules',
+  };
+}

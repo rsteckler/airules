@@ -1,15 +1,18 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Questionnaire } from './Questionnaire';
 import { QuestionnaireProvider } from '../context/QuestionnaireContext';
+import * as api from '../api/client';
+import { minimalFlow } from '../test/schemaFixture';
+
+vi.mock('../api/client');
 
 function renderQuestionnaire(props = {}) {
   return render(
     <QuestionnaireProvider>
       <Questionnaire
         onBackToStart={props.onBackToStart ?? (() => {})}
-        onShowResults={props.onShowResults ?? (() => {})}
         {...props}
       />
     </QuestionnaireProvider>
@@ -17,43 +20,50 @@ function renderQuestionnaire(props = {}) {
 }
 
 describe('Questionnaire page', () => {
-  it('shows first step (project type)', () => {
+  beforeEach(() => {
+    vi.mocked(api.getQuestionnaireFlow).mockResolvedValue(minimalFlow);
+    vi.mocked(api.createSession).mockResolvedValue({ id: 'test-session-id' });
+    vi.mocked(api.getSession).mockResolvedValue({ id: 'test-session-id', answers: {}, createdAt: '' });
+    vi.mocked(api.updateSession).mockResolvedValue({});
+  });
+
+  it('shows loading until flow data is fetched', async () => {
     renderQuestionnaire();
-    expect(screen.getByRole('heading', { name: /what type of project/i })).toBeInTheDocument();
+    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /what's in your stack/i })).toBeInTheDocument();
+    });
+  });
+
+  it('shows first step (stacks) after flow loads', async () => {
+    renderQuestionnaire();
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /what's in your stack/i })).toBeInTheDocument();
+    });
+    // First step has no back button
     expect(screen.queryByRole('button', { name: /back/i })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /^next$/i })).toBeInTheDocument();
   });
 
-  it('shows step indicator (progress bar)', () => {
+  it('shows step indicator after flow loads', async () => {
     renderQuestionnaire();
-    expect(screen.getByRole('progressbar', { name: /step 1 of/i })).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    });
   });
 
-  it('after selecting Backend only, next step is backend tech (not frontend)', async () => {
+  it('advances to next DFS node when clicking Next', async () => {
     const user = userEvent.setup();
     renderQuestionnaire();
-    await user.click(screen.getByRole('radio', { name: /backend only/i }));
-    await user.click(screen.getByRole('button', { name: /^next$/i }));
-    expect(screen.getByRole('heading', { name: /backend technologies/i })).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { name: /frontend technologies/i })).not.toBeInTheDocument();
-  });
-
-  it('after selecting Frontend only, next step is frontend tech', async () => {
-    const user = userEvent.setup();
-    renderQuestionnaire();
-    await user.click(screen.getByRole('radio', { name: /frontend only/i }));
-    await user.click(screen.getByRole('button', { name: /^next$/i }));
-    expect(screen.getByRole('heading', { name: /frontend technologies/i })).toBeInTheDocument();
-  });
-
-  it('Back goes to previous step', async () => {
-    const user = userEvent.setup();
-    renderQuestionnaire();
-    await user.click(screen.getByRole('radio', { name: /backend only/i }));
-    await user.click(screen.getByRole('button', { name: /^next$/i }));
-    expect(screen.getByRole('heading', { name: /backend technologies/i })).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /^back$/i }));
-    const heading = await screen.findByRole('heading', { name: /what type of project/i }, { timeout: 500 });
-    expect(heading).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /what's in your stack/i })).toBeInTheDocument();
+    });
+    // Default value includes 'web', so web_fw is reachable.
+    // Just click Next — stacks default is valid (minItems: 1).
+    await user.click(screen.getByRole('button', { name: /next/i }));
+    // DFS order: q_stacks -> q_web_fw -> q_pkg
+    // So next step should be web_frameworks
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /web framework/i })).toBeInTheDocument();
+    });
   });
 });

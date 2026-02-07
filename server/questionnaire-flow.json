@@ -1,0 +1,2355 @@
+{
+  "version": 2,
+  "rootId": "q_stacks",
+  "viewport": {
+    "x": 1116.875,
+    "y": 427,
+    "zoom": 0.5
+  },
+  "nodes": [
+    {
+      "id": "q_stacks",
+      "type": "question",
+      "data": {
+        "questionId": "stacks",
+        "label": "What's in your stack?",
+        "control": "multi",
+        "defaultValue": [
+          "web",
+          "server",
+          "tests"
+        ],
+        "validation": {
+          "required": true,
+          "minItems": 1
+        }
+      },
+      "position": {
+        "x": 298,
+        "y": -330
+      },
+      "measured": {
+        "width": 174,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_web_language",
+      "type": "question",
+      "data": {
+        "questionId": "web_language",
+        "label": "What web languages are you using?",
+        "control": "multi",
+        "defaultValue": [
+          "typescript"
+        ],
+        "validation": {
+          "required": true,
+          "minItems": 1
+        }
+      },
+      "position": {
+        "x": -2168,
+        "y": -78
+      },
+      "measured": {
+        "width": 269,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_web_frameworks",
+      "type": "question",
+      "data": {
+        "questionId": "web_frameworks",
+        "label": "What web framework(s) are you using?",
+        "control": "multi",
+        "defaultValue": [
+          "react"
+        ],
+        "validation": {
+          "required": true,
+          "minItems": 1
+        }
+      },
+      "position": {
+        "x": -2312,
+        "y": 68
+      },
+      "measured": {
+        "width": 288,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_state_react",
+      "type": "question",
+      "data": {
+        "questionId": "state_react",
+        "label": "React state management",
+        "control": "multi",
+        "defaultValue": [
+          "redux"
+        ],
+        "validation": {}
+      },
+      "position": {
+        "x": -2926.25,
+        "y": 204
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 197,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_state_vue",
+      "type": "question",
+      "data": {
+        "questionId": "state_vue",
+        "label": "Vue state management",
+        "control": "multi",
+        "defaultValue": [
+          "pinia"
+        ],
+        "validation": {}
+      },
+      "position": {
+        "x": -2726,
+        "y": 202
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 187,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_state_angular",
+      "type": "question",
+      "data": {
+        "questionId": "state_angular",
+        "label": "Angular state management",
+        "control": "multi",
+        "defaultValue": [
+          "ngrx"
+        ],
+        "validation": {}
+      },
+      "position": {
+        "x": -2536,
+        "y": 204
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 213,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_state_svelte",
+      "type": "question",
+      "data": {
+        "questionId": "state_svelte",
+        "label": "Svelte state management",
+        "control": "multi",
+        "defaultValue": [
+          "svelte_stores"
+        ],
+        "validation": {}
+      },
+      "position": {
+        "x": -2300,
+        "y": 200
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 200,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_web_server_state",
+      "type": "question",
+      "data": {
+        "questionId": "web_server_state",
+        "label": "Server-state / data fetching",
+        "control": "multi",
+        "defaultValue": [
+          "none"
+        ],
+        "validation": {}
+      },
+      "position": {
+        "x": -2104,
+        "y": 286
+      },
+      "measured": {
+        "width": 214,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_web_styling",
+      "type": "question",
+      "data": {
+        "questionId": "web_styling",
+        "label": "CSS / styling",
+        "control": "multi",
+        "defaultValue": [
+          "none"
+        ],
+        "validation": {}
+      },
+      "position": {
+        "x": -1996,
+        "y": 72
+      },
+      "measured": {
+        "width": 140,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_mobile_language",
+      "type": "question",
+      "data": {
+        "questionId": "mobile_language",
+        "label": "Mobile language",
+        "control": "single",
+        "defaultValue": "typescript_javascript",
+        "validation": {}
+      },
+      "position": {
+        "x": -846,
+        "y": -114
+      },
+      "measured": {
+        "width": 166,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_mfw_js",
+      "type": "question",
+      "data": {
+        "questionId": "mfw_js",
+        "label": "JS/TS mobile framework",
+        "control": "single",
+        "defaultValue": "react_native",
+        "validation": {}
+      },
+      "position": {
+        "x": -894,
+        "y": 36
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 195,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_mfw_dart",
+      "type": "question",
+      "data": {
+        "questionId": "mfw_dart",
+        "label": "Dart mobile framework",
+        "control": "single",
+        "defaultValue": "flutter",
+        "validation": {}
+      },
+      "position": {
+        "x": -820,
+        "y": 112
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 188,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_mfw_swift",
+      "type": "question",
+      "data": {
+        "questionId": "mfw_swift",
+        "label": "Swift mobile framework",
+        "control": "single",
+        "defaultValue": "native_ios",
+        "validation": {}
+      },
+      "position": {
+        "x": -746,
+        "y": 186
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 192,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_mfw_kotlin",
+      "type": "question",
+      "data": {
+        "questionId": "mfw_kotlin",
+        "label": "Kotlin mobile framework",
+        "control": "single",
+        "defaultValue": "native_android",
+        "validation": {}
+      },
+      "position": {
+        "x": -684,
+        "y": 254
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 198,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_server_language",
+      "type": "question",
+      "data": {
+        "questionId": "server_language",
+        "label": "Server language",
+        "control": "multi",
+        "defaultValue": [
+          "typescript"
+        ],
+        "validation": {
+          "required": true,
+          "minItems": 1
+        }
+      },
+      "position": {
+        "x": -1504,
+        "y": -92
+      },
+      "measured": {
+        "width": 161,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_fw_node",
+      "type": "question",
+      "data": {
+        "questionId": "fw_node",
+        "label": "Node.js framework",
+        "control": "single",
+        "defaultValue": "express",
+        "validation": {}
+      },
+      "position": {
+        "x": -1806,
+        "y": 70
+      },
+      "selected": true,
+      "dragging": false,
+      "measured": {
+        "width": 160,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_fw_python",
+      "type": "question",
+      "data": {
+        "questionId": "fw_python",
+        "label": "Python framework",
+        "control": "single",
+        "defaultValue": "none",
+        "validation": {}
+      },
+      "position": {
+        "x": -1634,
+        "y": 68
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 158,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_fw_go",
+      "type": "question",
+      "data": {
+        "questionId": "fw_go",
+        "label": "Go framework",
+        "control": "single",
+        "defaultValue": "none",
+        "validation": {}
+      },
+      "position": {
+        "x": -1382,
+        "y": 140
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 140,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_fw_java",
+      "type": "question",
+      "data": {
+        "questionId": "fw_java",
+        "label": "Java / Kotlin framework",
+        "control": "single",
+        "defaultValue": "none",
+        "validation": {}
+      },
+      "position": {
+        "x": -1756,
+        "y": 140
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 190,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_fw_rust",
+      "type": "question",
+      "data": {
+        "questionId": "fw_rust",
+        "label": "Rust framework",
+        "control": "single",
+        "defaultValue": "none",
+        "validation": {}
+      },
+      "position": {
+        "x": -1544,
+        "y": 132
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 140,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_fw_ruby",
+      "type": "question",
+      "data": {
+        "questionId": "fw_ruby",
+        "label": "Ruby framework",
+        "control": "single",
+        "defaultValue": "none",
+        "validation": {}
+      },
+      "position": {
+        "x": -1448,
+        "y": 66
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 145,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_database_type",
+      "type": "question",
+      "data": {
+        "questionId": "database_type",
+        "label": "Database type",
+        "control": "single",
+        "defaultValue": "none_external_api_only",
+        "validation": {}
+      },
+      "position": {
+        "x": -1154,
+        "y": -98
+      },
+      "measured": {
+        "width": 155,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_orm_sql",
+      "type": "question",
+      "data": {
+        "questionId": "orm_sql",
+        "label": "SQL ORM / query layer",
+        "control": "single",
+        "defaultValue": "none_raw_sql_queries",
+        "validation": {}
+      },
+      "position": {
+        "x": -1216,
+        "y": 46
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 186,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_orm_mongo",
+      "type": "question",
+      "data": {
+        "questionId": "orm_mongo",
+        "label": "MongoDB ODM",
+        "control": "single",
+        "defaultValue": "none",
+        "validation": {}
+      },
+      "position": {
+        "x": -1158,
+        "y": 114
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 142,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_orm_supabase",
+      "type": "question",
+      "data": {
+        "questionId": "orm_supabase",
+        "label": "Supabase data layer",
+        "control": "single",
+        "defaultValue": "none_supabase_client",
+        "validation": {}
+      },
+      "position": {
+        "x": -1096,
+        "y": 188
+      },
+      "selected": false,
+      "dragging": false,
+      "measured": {
+        "width": 167,
+        "height": 60
+      }
+    },
+    {
+      "id": "q_desktop_framework",
+      "type": "question",
+      "data": {
+        "questionId": "desktop_framework",
+        "label": "Desktop framework",
+        "control": "single",
+        "defaultValue": "electron",
+        "validation": {}
+      },
+      "position": {
+        "x": -610,
+        "y": -102
+      },
+      "measured": {
+        "width": 177,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_cli_language",
+      "type": "question",
+      "data": {
+        "questionId": "cli_language",
+        "label": "CLI language",
+        "control": "single",
+        "defaultValue": "typescript_javascript",
+        "validation": {}
+      },
+      "position": {
+        "x": -412,
+        "y": -108
+      },
+      "measured": {
+        "width": 149,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_testing_tools",
+      "type": "question",
+      "data": {
+        "questionId": "testing_tools",
+        "label": "Testing tools",
+        "control": "multi",
+        "defaultValue": [
+          "none"
+        ],
+        "validation": {}
+      },
+      "position": {
+        "x": -238,
+        "y": -96
+      },
+      "measured": {
+        "width": 150,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_documentation_system",
+      "type": "question",
+      "data": {
+        "questionId": "documentation_system",
+        "label": "Docs system",
+        "control": "multi",
+        "defaultValue": ["readme_only"],
+        "validation": {}
+      },
+      "position": {
+        "x": -68,
+        "y": -92
+      },
+      "measured": {
+        "width": 193,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_deployment_target",
+      "type": "question",
+      "data": {
+        "questionId": "deployment_target",
+        "label": "Deployment target",
+        "control": "multi",
+        "defaultValue": ["unknown_na"],
+        "validation": {}
+      },
+      "position": {
+        "x": 148,
+        "y": -86
+      },
+      "measured": {
+        "width": 177,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_package_manager",
+      "type": "question",
+      "data": {
+        "questionId": "package_manager",
+        "label": "Package manager",
+        "control": "multi",
+        "defaultValue": [
+          "pnpm"
+        ],
+        "validation": {
+          "required": false,
+          "minItems": 1
+        }
+      },
+      "position": {
+        "x": 598,
+        "y": -400
+      },
+      "measured": {
+        "width": 161,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_ai_permissions",
+      "type": "question",
+      "data": {
+        "questionId": "ai_permissions",
+        "label": "AI permissions (uncheck things you NEVER want the agent to do)",
+        "control": "multi",
+        "defaultValue": [
+          "create_files",
+          "edit_files",
+          "refactor_multi_module",
+          "run_commands",
+          "install_deps",
+          "update_lockfiles",
+          "update_ci_config"
+        ],
+        "validation": {
+          "required": false
+        }
+      },
+      "position": {
+        "x": 598,
+        "y": -300
+      },
+      "measured": {
+        "width": 453,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_always_ask_before",
+      "type": "question",
+      "data": {
+        "questionId": "always_ask_before",
+        "label": "Always ask before",
+        "control": "multi",
+        "defaultValue": [
+          "add_dependencies",
+          "auth_security_sensitive_changes",
+          "ci_deploy_config_changes"
+        ],
+        "validation": {
+          "required": false
+        }
+      },
+      "position": {
+        "x": 598,
+        "y": -200
+      },
+      "measured": {
+        "width": 172,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_when_run_checks",
+      "type": "question",
+      "data": {
+        "questionId": "when_run_checks",
+        "label": "When should the AI run lint, tests, and typechecks?",
+        "control": "single",
+        "defaultValue": "after_meaningful_changes",
+        "validation": {
+          "required": false
+        }
+      },
+      "position": {
+        "x": 598,
+        "y": -100
+      },
+      "measured": {
+        "width": 364,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_git_behavior",
+      "type": "question",
+      "data": {
+        "questionId": "git_behavior",
+        "label": "Git behavior",
+        "control": "single",
+        "defaultValue": "git_push_when_asked",
+        "validation": {
+          "required": false
+        }
+      },
+      "position": {
+        "x": 598,
+        "y": 0
+      },
+      "measured": {
+        "width": 149,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_documentation_expectations",
+      "type": "question",
+      "data": {
+        "questionId": "documentation_expectations",
+        "label": "When to update documents and plans",
+        "control": "single",
+        "defaultValue": "update_when_behavior_changes",
+        "validation": {
+          "required": false
+        }
+      },
+      "position": {
+        "x": 598,
+        "y": 100
+      },
+      "measured": {
+        "width": 226,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_output_preference",
+      "type": "question",
+      "data": {
+        "questionId": "output_preference",
+        "label": "AI output preference",
+        "control": "single",
+        "defaultValue": "code_plus_brief",
+        "validation": {
+          "required": false
+        }
+      },
+      "position": {
+        "x": 598,
+        "y": 300
+      },
+      "measured": {
+        "width": 177,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "q_uncertainty_handling",
+      "type": "question",
+      "data": {
+        "questionId": "uncertainty_handling",
+        "label": "How should uncertainty be handled?",
+        "control": "single",
+        "defaultValue": "ask_one_question_then_proceed",
+        "validation": {
+          "required": false
+        }
+      },
+      "position": {
+        "x": 598,
+        "y": 400
+      },
+      "measured": {
+        "width": 273,
+        "height": 60
+      },
+      "selected": false,
+      "dragging": false
+    }
+  ],
+  "edges": [
+    {
+      "id": "e_stacks_web_lang",
+      "source": "q_stacks",
+      "target": "q_web_language",
+      "data": {
+        "order": 10,
+        "when": {
+          "questionId": "stacks",
+          "op": "contains",
+          "value": "web"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_mobile_lang",
+      "source": "q_stacks",
+      "target": "q_mobile_language",
+      "data": {
+        "order": 20,
+        "when": {
+          "questionId": "stacks",
+          "op": "contains",
+          "value": "mobile"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_server_lang",
+      "source": "q_stacks",
+      "target": "q_server_language",
+      "data": {
+        "order": 30,
+        "when": {
+          "questionId": "stacks",
+          "op": "contains",
+          "value": "server"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_db_type",
+      "source": "q_stacks",
+      "target": "q_database_type",
+      "data": {
+        "order": 40,
+        "when": {
+          "op": "or",
+          "conditions": [
+            {
+              "questionId": "stacks",
+              "op": "contains",
+              "value": "data"
+            }
+          ]
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_desktop",
+      "source": "q_stacks",
+      "target": "q_desktop_framework",
+      "data": {
+        "order": 50,
+        "when": {
+          "questionId": "stacks",
+          "op": "contains",
+          "value": "desktop"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_cli",
+      "source": "q_stacks",
+      "target": "q_cli_language",
+      "data": {
+        "order": 60,
+        "when": {
+          "questionId": "stacks",
+          "op": "contains",
+          "value": "cli"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_tests",
+      "source": "q_stacks",
+      "target": "q_testing_tools",
+      "data": {
+        "order": 70,
+        "when": {
+          "questionId": "stacks",
+          "op": "contains",
+          "value": "tests"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_docs",
+      "source": "q_stacks",
+      "target": "q_documentation_system",
+      "data": {
+        "order": 80,
+        "when": {
+          "questionId": "stacks",
+          "op": "contains",
+          "value": "docs"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_deploy",
+      "source": "q_stacks",
+      "target": "q_deployment_target",
+      "data": {
+        "order": 200,
+        "when": {
+          "questionId": "stacks",
+          "op": "contains",
+          "value": "deployment"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_pkgmgr",
+      "source": "q_stacks",
+      "target": "q_package_manager",
+      "data": {
+        "order": 220
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_ai_perms",
+      "source": "q_stacks",
+      "target": "q_ai_permissions",
+      "data": {
+        "order": 230
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_ask_before",
+      "source": "q_stacks",
+      "target": "q_always_ask_before",
+      "data": {
+        "order": 240
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_run_checks",
+      "source": "q_stacks",
+      "target": "q_when_run_checks",
+      "data": {
+        "order": 250
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_git",
+      "source": "q_stacks",
+      "target": "q_git_behavior",
+      "data": {
+        "order": 260
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_doc_expect",
+      "source": "q_stacks",
+      "target": "q_documentation_expectations",
+      "data": {
+        "order": 270
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_output",
+      "source": "q_stacks",
+      "target": "q_output_preference",
+      "data": {
+        "order": 290
+      },
+      "selected": false
+    },
+    {
+      "id": "e_stacks_uncertainty",
+      "source": "q_stacks",
+      "target": "q_uncertainty_handling",
+      "data": {
+        "order": 300
+      },
+      "selected": false
+    },
+    {
+      "id": "e_web_lang_fw",
+      "source": "q_web_language",
+      "target": "q_web_frameworks",
+      "data": {
+        "order": 10
+      },
+      "selected": false
+    },
+    {
+      "id": "e_web_lang_styling",
+      "source": "q_web_language",
+      "target": "q_web_styling",
+      "data": {
+        "order": 20
+      },
+      "selected": false
+    },
+    {
+      "id": "e_web_fw_state_react",
+      "source": "q_web_frameworks",
+      "target": "q_state_react",
+      "data": {
+        "order": 20,
+        "when": {
+          "op": "or",
+          "conditions": [
+            {
+              "questionId": "web_frameworks",
+              "op": "contains",
+              "value": "react"
+            },
+            {
+              "questionId": "web_frameworks",
+              "op": "contains",
+              "value": "nextjs_app_router"
+            },
+            {
+              "questionId": "web_frameworks",
+              "op": "contains",
+              "value": "nextjs_pages_router"
+            }
+          ]
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_web_fw_state_vue",
+      "source": "q_web_frameworks",
+      "target": "q_state_vue",
+      "data": {
+        "order": 22,
+        "when": {
+          "questionId": "web_frameworks",
+          "op": "contains",
+          "value": "vue"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_web_fw_state_angular",
+      "source": "q_web_frameworks",
+      "target": "q_state_angular",
+      "data": {
+        "order": 24,
+        "when": {
+          "questionId": "web_frameworks",
+          "op": "contains",
+          "value": "angular"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_web_fw_state_svelte",
+      "source": "q_web_frameworks",
+      "target": "q_state_svelte",
+      "data": {
+        "order": 26,
+        "when": {
+          "questionId": "web_frameworks",
+          "op": "contains",
+          "value": "svelte"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_web_fw_server_state",
+      "source": "q_web_frameworks",
+      "target": "q_web_server_state",
+      "data": {
+        "order": 30,
+        "when": {
+          "op": "or",
+          "conditions": [
+            {
+              "questionId": "web_frameworks",
+              "op": "contains",
+              "value": "react"
+            },
+            {
+              "questionId": "web_frameworks",
+              "op": "contains",
+              "value": "nextjs_app_router"
+            },
+            {
+              "questionId": "web_frameworks",
+              "op": "contains",
+              "value": "nextjs_pages_router"
+            },
+            {
+              "questionId": "web_frameworks",
+              "op": "contains",
+              "value": "svelte"
+            },
+            {
+              "questionId": "web_frameworks",
+              "op": "contains",
+              "value": "solid"
+            }
+          ]
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_mobile_lang_fw_js",
+      "source": "q_mobile_language",
+      "target": "q_mfw_js",
+      "data": {
+        "order": 10,
+        "when": {
+          "questionId": "mobile_language",
+          "op": "equals",
+          "value": "typescript_javascript"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_mobile_lang_fw_dart",
+      "source": "q_mobile_language",
+      "target": "q_mfw_dart",
+      "data": {
+        "order": 12,
+        "when": {
+          "questionId": "mobile_language",
+          "op": "equals",
+          "value": "dart"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_mobile_lang_fw_swift",
+      "source": "q_mobile_language",
+      "target": "q_mfw_swift",
+      "data": {
+        "order": 14,
+        "when": {
+          "questionId": "mobile_language",
+          "op": "equals",
+          "value": "swift"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_mobile_lang_fw_kotlin",
+      "source": "q_mobile_language",
+      "target": "q_mfw_kotlin",
+      "data": {
+        "order": 16,
+        "when": {
+          "questionId": "mobile_language",
+          "op": "equals",
+          "value": "kotlin"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_server_lang_fw_node",
+      "source": "q_server_language",
+      "target": "q_fw_node",
+      "data": {
+        "order": 10,
+        "when": {
+          "op": "or",
+          "conditions": [
+            {
+              "questionId": "server_language",
+              "op": "contains",
+              "value": "typescript"
+            },
+            {
+              "questionId": "server_language",
+              "op": "contains",
+              "value": "javascript"
+            }
+          ]
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_server_lang_fw_python",
+      "source": "q_server_language",
+      "target": "q_fw_python",
+      "data": {
+        "order": 12,
+        "when": {
+          "questionId": "server_language",
+          "op": "contains",
+          "value": "python"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_server_lang_fw_go",
+      "source": "q_server_language",
+      "target": "q_fw_go",
+      "data": {
+        "order": 14,
+        "when": {
+          "questionId": "server_language",
+          "op": "contains",
+          "value": "go"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_server_lang_fw_java",
+      "source": "q_server_language",
+      "target": "q_fw_java",
+      "data": {
+        "order": 16,
+        "when": {
+          "questionId": "server_language",
+          "op": "contains",
+          "value": "java_kotlin"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_server_lang_fw_rust",
+      "source": "q_server_language",
+      "target": "q_fw_rust",
+      "data": {
+        "order": 18,
+        "when": {
+          "questionId": "server_language",
+          "op": "contains",
+          "value": "rust"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_server_lang_fw_ruby",
+      "source": "q_server_language",
+      "target": "q_fw_ruby",
+      "data": {
+        "order": 20,
+        "when": {
+          "questionId": "server_language",
+          "op": "contains",
+          "value": "ruby"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_db_type_orm_sql",
+      "source": "q_database_type",
+      "target": "q_orm_sql",
+      "data": {
+        "order": 10,
+        "when": {
+          "op": "or",
+          "conditions": [
+            {
+              "questionId": "database_type",
+              "op": "equals",
+              "value": "postgres_mysql"
+            },
+            {
+              "questionId": "database_type",
+              "op": "equals",
+              "value": "sqlite"
+            }
+          ]
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_db_type_orm_mongo",
+      "source": "q_database_type",
+      "target": "q_orm_mongo",
+      "data": {
+        "order": 12,
+        "when": {
+          "questionId": "database_type",
+          "op": "equals",
+          "value": "mongodb"
+        }
+      },
+      "selected": false
+    },
+    {
+      "id": "e_db_type_orm_supabase",
+      "source": "q_database_type",
+      "target": "q_orm_supabase",
+      "data": {
+        "order": 14,
+        "when": {
+          "questionId": "database_type",
+          "op": "equals",
+          "value": "supabase"
+        }
+      },
+      "selected": false
+    }
+  ],
+  "options": {
+    "stacks": [
+      {
+        "value": "web",
+        "label": "Web"
+      },
+      {
+        "value": "server",
+        "label": "Server"
+      },
+      {
+        "value": "data",
+        "label": "Data "
+      },
+      {
+        "value": "mobile",
+        "label": "Mobile"
+      },
+      {
+        "value": "desktop",
+        "label": "Desktop"
+      },
+      {
+        "value": "cli",
+        "label": "CLI"
+      },
+      {
+        "value": "tests",
+        "label": "Tests"
+      },
+      {
+        "value": "docs",
+        "label": "Docs"
+      },
+      {
+        "value": "deployment",
+        "label": "Deployment"
+      }
+    ],
+    "web_language": [
+      {
+        "value": "typescript",
+        "label": "TypeScript"
+      },
+      {
+        "value": "javascript",
+        "label": "JavaScript"
+      },
+      {
+        "value": "html",
+        "label": "HTML"
+      },
+      {
+        "value": "css",
+        "label": "CSS"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "web_frameworks": [
+      {
+        "value": "none",
+        "label": "None / Vanilla",
+        "type": "none"
+      },
+      {
+        "value": "react",
+        "label": "React"
+      },
+      {
+        "value": "nextjs_app_router",
+        "label": "Next.js (App Router)"
+      },
+      {
+        "value": "nextjs_pages_router",
+        "label": "Next.js (Pages Router)"
+      },
+      {
+        "value": "vue",
+        "label": "Vue"
+      },
+      {
+        "value": "angular",
+        "label": "Angular"
+      },
+      {
+        "value": "svelte",
+        "label": "Svelte"
+      },
+      {
+        "value": "solid",
+        "label": "Solid"
+      },
+      {
+        "value": "qwik",
+        "label": "Qwik"
+      },
+      {
+        "value": "astro",
+        "label": "Astro"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "state_react": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "redux",
+        "label": "Redux"
+      },
+      {
+        "value": "zustand",
+        "label": "Zustand"
+      },
+      {
+        "value": "mobx",
+        "label": "MobX"
+      },
+      {
+        "value": "jotai",
+        "label": "Jotai"
+      },
+      {
+        "value": "recoil",
+        "label": "Recoil"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "state_vue": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "pinia",
+        "label": "Pinia"
+      },
+      {
+        "value": "vuex",
+        "label": "Vuex"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "state_angular": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "ngrx",
+        "label": "NgRx"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "state_svelte": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "svelte_stores",
+        "label": "Svelte Stores"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "web_server_state": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "tanstack_query",
+        "label": "TanStack Query"
+      },
+      {
+        "value": "swr",
+        "label": "SWR"
+      },
+      {
+        "value": "apollo",
+        "label": "Apollo"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "web_styling": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "tailwind",
+        "label": "Tailwind"
+      },
+      {
+        "value": "css_modules",
+        "label": "CSS Modules"
+      },
+      {
+        "value": "styled_components",
+        "label": "styled-components"
+      },
+      {
+        "value": "mui",
+        "label": "MUI"
+      },
+      {
+        "value": "chakra",
+        "label": "Chakra"
+      },
+      {
+        "value": "shadcn_ui",
+        "label": "shadcn/ui"
+      },
+      {
+        "value": "postcss",
+        "label": "PostCSS"
+      },
+      {
+        "value": "sass",
+        "label": "Sass"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "mobile_language": [
+      {
+        "value": "typescript_javascript",
+        "label": "TypeScript / JavaScript"
+      },
+      {
+        "value": "dart",
+        "label": "Dart"
+      },
+      {
+        "value": "swift",
+        "label": "Swift"
+      },
+      {
+        "value": "kotlin",
+        "label": "Kotlin"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "mfw_js": [
+      {
+        "value": "react_native",
+        "label": "React Native"
+      },
+      {
+        "value": "expo",
+        "label": "Expo"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "mfw_dart": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "flutter",
+        "label": "Flutter"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "mfw_swift": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "native_ios",
+        "label": "Native iOS"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "mfw_kotlin": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "native_android",
+        "label": "Native Android"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "server_language": [
+      {
+        "value": "typescript",
+        "label": "TypeScript"
+      },
+      {
+        "value": "javascript",
+        "label": "JavaScript"
+      },
+      {
+        "value": "python",
+        "label": "Python"
+      },
+      {
+        "value": "go",
+        "label": "Go"
+      },
+      {
+        "value": "java_kotlin",
+        "label": "Java / Kotlin"
+      },
+      {
+        "value": "rust",
+        "label": "Rust"
+      },
+      {
+        "value": "ruby",
+        "label": "Ruby"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "fw_node": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "express",
+        "label": "Express"
+      },
+      {
+        "value": "fastify",
+        "label": "Fastify"
+      },
+      {
+        "value": "nestjs",
+        "label": "NestJS"
+      },
+      {
+        "value": "hono",
+        "label": "Hono"
+      },
+      {
+        "value": "nitro",
+        "label": "Nitro"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "fw_python": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "fastapi",
+        "label": "FastAPI"
+      },
+      {
+        "value": "django",
+        "label": "Django"
+      },
+      {
+        "value": "flask",
+        "label": "Flask"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "fw_go": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "gin",
+        "label": "Gin"
+      },
+      {
+        "value": "echo",
+        "label": "Echo"
+      },
+      {
+        "value": "fiber",
+        "label": "Fiber"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "fw_java": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "spring_boot",
+        "label": "Spring Boot"
+      },
+      {
+        "value": "ktor",
+        "label": "Ktor"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "fw_rust": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "axum",
+        "label": "Axum"
+      },
+      {
+        "value": "actix",
+        "label": "Actix"
+      },
+      {
+        "value": "rocket",
+        "label": "Rocket"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "fw_ruby": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "rails",
+        "label": "Rails"
+      },
+      {
+        "value": "sinatra",
+        "label": "Sinatra"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "database_type": [
+      {
+        "value": "none_external_api_only",
+        "label": "None / External API Only"
+      },
+      {
+        "value": "postgres_mysql",
+        "label": "Postgres / MySQL"
+      },
+      {
+        "value": "sqlite",
+        "label": "SQLite"
+      },
+      {
+        "value": "mongodb",
+        "label": "MongoDB"
+      },
+      {
+        "value": "dynamodb",
+        "label": "DynamoDB"
+      },
+      {
+        "value": "redis",
+        "label": "Redis"
+      },
+      {
+        "value": "supabase",
+        "label": "Supabase"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "orm_sql": [
+      {
+        "value": "none_raw_sql_queries",
+        "label": "None / Raw SQL"
+      },
+      {
+        "value": "prisma",
+        "label": "Prisma"
+      },
+      {
+        "value": "typeorm",
+        "label": "TypeORM"
+      },
+      {
+        "value": "sequelize",
+        "label": "Sequelize"
+      },
+      {
+        "value": "drizzle",
+        "label": "Drizzle"
+      },
+      {
+        "value": "sqlalchemy",
+        "label": "SQLAlchemy"
+      },
+      {
+        "value": "django_orm",
+        "label": "Django ORM"
+      },
+      {
+        "value": "gorm",
+        "label": "GORM"
+      },
+      {
+        "value": "hibernate",
+        "label": "Hibernate"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "orm_mongo": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "mongoose",
+        "label": "Mongoose"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "orm_supabase": [
+      {
+        "value": "none_supabase_client",
+        "label": "None (Supabase client)"
+      },
+      {
+        "value": "prisma",
+        "label": "Prisma"
+      },
+      {
+        "value": "drizzle",
+        "label": "Drizzle"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "desktop_framework": [
+      {
+        "value": "electron",
+        "label": "Electron"
+      },
+      {
+        "value": "tauri",
+        "label": "Tauri"
+      },
+      {
+        "value": "dotnet_desktop",
+        "label": ".NET Desktop"
+      },
+      {
+        "value": "native_macos",
+        "label": "Native macOS"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "cli_language": [
+      {
+        "value": "typescript_javascript",
+        "label": "TypeScript / JavaScript"
+      },
+      {
+        "value": "python",
+        "label": "Python"
+      },
+      {
+        "value": "go",
+        "label": "Go"
+      },
+      {
+        "value": "rust",
+        "label": "Rust"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "testing_tools": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "jest",
+        "label": "Jest"
+      },
+      {
+        "value": "vitest",
+        "label": "Vitest"
+      },
+      {
+        "value": "playwright",
+        "label": "Playwright"
+      },
+      {
+        "value": "cypress",
+        "label": "Cypress"
+      },
+      {
+        "value": "detox",
+        "label": "Detox"
+      },
+      {
+        "value": "pytest",
+        "label": "pytest"
+      },
+      {
+        "value": "go_test",
+        "label": "go test"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "documentation_system": [
+      {
+        "value": "readme_only",
+        "label": "README only"
+      },
+      {
+        "value": "md_docs_folder",
+        "label": "Markdown docs folder"
+      },
+      {
+        "value": "docusaurus",
+        "label": "Docusaurus"
+      },
+      {
+        "value": "storybook",
+        "label": "Storybook"
+      },
+      {
+        "value": "typedoc",
+        "label": "TypeDoc"
+      },
+      {
+        "value": "sphinx",
+        "label": "Sphinx"
+      },
+      {
+        "value": "mkdocs",
+        "label": "MkDocs"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "deployment_target": [
+      {
+        "value": "vercel",
+        "label": "Vercel"
+      },
+      {
+        "value": "aws",
+        "label": "AWS"
+      },
+      {
+        "value": "gcp",
+        "label": "GCP"
+      },
+      {
+        "value": "azure",
+        "label": "Azure"
+      },
+      {
+        "value": "self_hosted_docker",
+        "label": "Self-hosted / Docker"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "package_manager": [
+      {
+        "value": "pnpm",
+        "label": "pnpm"
+      },
+      {
+        "value": "yarn",
+        "label": "Yarn"
+      },
+      {
+        "value": "npm",
+        "label": "npm"
+      },
+      {
+        "value": "other",
+        "label": "Other",
+        "type": "other"
+      }
+    ],
+    "ai_permissions": [
+      {
+        "value": "none",
+        "label": "None",
+        "type": "none"
+      },
+      {
+        "value": "create_files",
+        "label": "Create files"
+      },
+      {
+        "value": "edit_files",
+        "label": "Edit files"
+      },
+      {
+        "value": "refactor_multi_module",
+        "label": "Refactor across modules"
+      },
+      {
+        "value": "run_commands",
+        "label": "Run commands"
+      },
+      {
+        "value": "install_deps",
+        "label": "Install dependencies"
+      },
+      {
+        "value": "update_lockfiles",
+        "label": "Update lockfiles"
+      },
+      {
+        "value": "update_ci_config",
+        "label": "Update CI config"
+      }
+    ],
+    "always_ask_before": [
+      {
+        "value": "none",
+        "label": "None (just do it)",
+        "type": "none"
+      },
+      {
+        "value": "add_dependencies",
+        "label": "Adding dependencies"
+      },
+      {
+        "value": "db_migrations_schema_changes",
+        "label": "DB migrations / schema changes"
+      },
+      {
+        "value": "auth_security_sensitive_changes",
+        "label": "Auth / security-sensitive changes"
+      },
+      {
+        "value": "delete_files",
+        "label": "Deleting files"
+      },
+      {
+        "value": "public_api_changes",
+        "label": "Public API changes"
+      },
+      {
+        "value": "ci_deploy_config_changes",
+        "label": "CI / deploy config changes"
+      }
+    ],
+    "when_run_checks": [
+      {
+        "value": "never_unless_asked",
+        "label": "Never (unless asked)"
+      },
+      {
+        "value": "after_meaningful_changes",
+        "label": "After meaningful changes"
+      },
+      {
+        "value": "before_commit",
+        "label": "Before commit"
+      }
+    ],
+    "git_behavior": [
+      {
+        "value": "git_none",
+        "label": "Do not commit or push unless asked"
+      },
+      {
+        "value": "git_push_when_asked",
+        "label": "Commit as needed but only push when asked"
+      },
+      {
+        "value": "git_push",
+        "label": "Commit and push as needed"
+      }
+    ],
+    "documentation_expectations": [
+      {
+        "value": "dont_touch_unless_asked",
+        "label": "Don't touch unless asked"
+      },
+      {
+        "value": "update_when_behavior_changes",
+        "label": "Update when behavior changes"
+      }
+    ],
+    "output_preference": [
+      {
+        "value": "code_only",
+        "label": "Code only"
+      },
+      {
+        "value": "plan_then_code",
+        "label": "Plan then code"
+      },
+      {
+        "value": "code_plus_brief",
+        "label": "Code + brief explanation"
+      },
+      {
+        "value": "verbose_explanation",
+        "label": "Code + verbose explanation"
+      }
+    ],
+    "uncertainty_handling": [
+      {
+        "value": "ask_before_proceeding",
+        "label": "Ask for clarification before proceeding"
+      },
+      {
+        "value": "ask_one_question_then_proceed",
+        "label": "Ask only the most important question then proceed"
+      },
+      {
+        "value": "best_assumption_continue",
+        "label": "Best guess and proceed"
+      }
+    ]
+  }
+}
