@@ -1,92 +1,80 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useQuestionnaire } from '../context/QuestionnaireContext';
-import { buildGraphMaps, companionFieldName } from '../engine/traversal.js';
+import { generateRules } from '../api/client';
 
 const RESULTS_STEP_ID = 'results';
-
-/**
- * Build a plain-text summary of questionnaire results.
- * Each answered (non-skipped) question is shown as:
- *   Question Label: Selected Option Label(s)
- */
-function buildResultsText(flowData, traversalOrder, answers, skipped) {
-  if (!flowData || !traversalOrder) return '';
-  const maps = buildGraphMaps(flowData);
-  const lines = [];
-
-  for (const nodeId of traversalOrder) {
-    const node = maps.nodesById.get(nodeId);
-    if (!node) continue;
-
-    const { questionId, label, control } = node.data;
-
-    // Skip if question was skipped
-    if (skipped?.has(questionId)) continue;
-
-    const answer = answers[questionId];
-    if (answer === undefined || answer === null) continue;
-
-    const optionsList = flowData.options?.[questionId] ?? [];
-    const optionLabelMap = new Map(optionsList.map((o) => [o.value, o.label]));
-
-    let displayValue;
-    if (control === 'multi' && Array.isArray(answer)) {
-      displayValue = answer.map((v) => optionLabelMap.get(v) || v).join(', ');
-    } else {
-      displayValue = optionLabelMap.get(answer) || answer;
-    }
-
-    // Append companion "other" text if present
-    const companionText = answers[companionFieldName(questionId)];
-    if (companionText) {
-      displayValue += ` (${companionText})`;
-    }
-
-    lines.push(`${label}: ${displayValue}`);
-  }
-
-  return lines.join('\n');
-}
 
 export function ResultsCard({ onBackToQuestionnaire, flowData, skipped, traversalOrder }) {
   const { answers } = useQuestionnaire();
 
-  const resultsText = useMemo(
-    () => buildResultsText(flowData, traversalOrder, answers, skipped),
-    [flowData, traversalOrder, answers, skipped],
-  );
+  const [rulesContent, setRulesContent] = useState('');
+  const [filename, setFilename] = useState('rules.md');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Generate rules when the component mounts or answers change
+  const generate = useCallback(async () => {
+    if (!answers || Object.keys(answers).length === 0) return;
+
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await generateRules({ answers });
+      setRulesContent(result.content || '');
+      setFilename(result.filename || 'rules.md');
+    } catch (err) {
+      console.error('Failed to generate rules:', err);
+      setError(err?.body?.error || err?.message || 'Failed to generate rules');
+    } finally {
+      setLoading(false);
+    }
+  }, [answers]);
+
+  useEffect(() => {
+    generate();
+  }, [generate]);
 
   const handleCopy = () => {
-    if (resultsText) {
-      navigator.clipboard?.writeText?.(resultsText).catch(() => {});
+    if (rulesContent) {
+      navigator.clipboard?.writeText?.(rulesContent).catch(() => {});
     }
   };
 
   const handleDownload = () => {
-    const text = resultsText || 'No answers recorded.';
+    const text = rulesContent || 'No rules generated.';
     const blob = new Blob([text], { type: 'text/plain' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'questionnaire-results.txt';
+    a.download = filename;
     a.click();
     URL.revokeObjectURL(a.href);
   };
 
   return (
     <div className="results-card">
-      <h2>Your results</h2>
+      <h2>Your AI Rules</h2>
       <div className="results-content">
-        {resultsText ? (
-          <pre className="results-pre">{resultsText}</pre>
-        ) : (
+        {loading && (
+          <p className="results-loading">Generating rules...</p>
+        )}
+        {error && (
+          <div className="results-error">
+            <p>Error: {error}</p>
+            <button type="button" onClick={generate}>Retry</button>
+          </div>
+        )}
+        {!loading && !error && rulesContent && (
+          <pre className="results-pre">{rulesContent}</pre>
+        )}
+        {!loading && !error && !rulesContent && (
           <p>No answers recorded. Complete the questionnaire to see results.</p>
         )}
       </div>
       <div className="results-actions">
-        <button type="button" className="results-actions__copy" onClick={handleCopy} disabled={!resultsText}>
+        <button type="button" className="results-actions__copy" onClick={handleCopy} disabled={!rulesContent || loading}>
           Copy
         </button>
-        <button type="button" className="results-actions__download" onClick={handleDownload}>
+        <button type="button" className="results-actions__download" onClick={handleDownload} disabled={!rulesContent || loading}>
           Download
         </button>
       </div>

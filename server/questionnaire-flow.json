@@ -2,8 +2,8 @@
   "version": 2,
   "rootId": "q_stacks",
   "viewport": {
-    "x": 1116.875,
-    "y": 427,
+    "x": 265.875,
+    "y": 440,
     "zoom": 0.5
   },
   "nodes": [
@@ -370,7 +370,7 @@
         "x": -1806,
         "y": 70
       },
-      "selected": true,
+      "selected": false,
       "dragging": false,
       "measured": {
         "width": 160,
@@ -638,7 +638,9 @@
         "questionId": "documentation_system",
         "label": "Docs system",
         "control": "multi",
-        "defaultValue": ["readme_only"],
+        "defaultValue": [
+          "readme_only"
+        ],
         "validation": {}
       },
       "position": {
@@ -659,7 +661,7 @@
         "questionId": "deployment_target",
         "label": "Deployment target",
         "control": "multi",
-        "defaultValue": ["unknown_na"],
+        "defaultValue": [],
         "validation": {}
       },
       "position": {
@@ -704,16 +706,14 @@
       "type": "question",
       "data": {
         "questionId": "ai_permissions",
-        "label": "AI permissions (uncheck things you NEVER want the agent to do)",
+        "label": "When should the AI ask for permission before acting?",
         "control": "multi",
         "defaultValue": [
-          "create_files",
-          "edit_files",
-          "refactor_multi_module",
-          "run_commands",
-          "install_deps",
-          "update_lockfiles",
-          "update_ci_config"
+          "install_packages",
+          "run_app",
+          "update_ci",
+          "modify_deployment",
+          "auth_security"
         ],
         "validation": {
           "required": false
@@ -724,37 +724,10 @@
         "y": -300
       },
       "measured": {
-        "width": 453,
+        "width": 380,
         "height": 60
       },
-      "selected": false,
-      "dragging": false
-    },
-    {
-      "id": "q_always_ask_before",
-      "type": "question",
-      "data": {
-        "questionId": "always_ask_before",
-        "label": "Always ask before",
-        "control": "multi",
-        "defaultValue": [
-          "add_dependencies",
-          "auth_security_sensitive_changes",
-          "ci_deploy_config_changes"
-        ],
-        "validation": {
-          "required": false
-        }
-      },
-      "position": {
-        "x": 598,
-        "y": -200
-      },
-      "measured": {
-        "width": 172,
-        "height": 60
-      },
-      "selected": false,
+      "selected": true,
       "dragging": false
     },
     {
@@ -1020,15 +993,6 @@
       "target": "q_ai_permissions",
       "data": {
         "order": 230
-      },
-      "selected": false
-    },
-    {
-      "id": "e_stacks_ask_before",
-      "source": "q_stacks",
-      "target": "q_always_ask_before",
-      "data": {
-        "order": 240
       },
       "selected": false
     },
@@ -2137,7 +2101,7 @@
     "documentation_system": [
       {
         "value": "readme_only",
-        "label": "README only"
+        "label": "README.md"
       },
       {
         "value": "md_docs_folder",
@@ -2217,68 +2181,36 @@
     ],
     "ai_permissions": [
       {
-        "value": "none",
-        "label": "None",
-        "type": "none"
-      },
-      {
-        "value": "create_files",
-        "label": "Create files"
-      },
-      {
-        "value": "edit_files",
-        "label": "Edit files"
-      },
-      {
-        "value": "refactor_multi_module",
-        "label": "Refactor across modules"
-      },
-      {
-        "value": "run_commands",
-        "label": "Run commands"
-      },
-      {
-        "value": "install_deps",
-        "label": "Install dependencies"
-      },
-      {
-        "value": "update_lockfiles",
-        "label": "Update lockfiles"
-      },
-      {
-        "value": "update_ci_config",
-        "label": "Update CI config"
-      }
-    ],
-    "always_ask_before": [
-      {
-        "value": "none",
-        "label": "None (just do it)",
-        "type": "none"
-      },
-      {
-        "value": "add_dependencies",
-        "label": "Adding dependencies"
-      },
-      {
-        "value": "db_migrations_schema_changes",
-        "label": "DB migrations / schema changes"
-      },
-      {
-        "value": "auth_security_sensitive_changes",
-        "label": "Auth / security-sensitive changes"
-      },
-      {
         "value": "delete_files",
-        "label": "Deleting files"
+        "label": "Delete files"
       },
       {
-        "value": "public_api_changes",
-        "label": "Public API changes"
+        "value": "install_packages",
+        "label": "Install packages"
       },
       {
-        "value": "ci_deploy_config_changes",
-        "label": "CI / deploy config changes"
+        "value": "run_app",
+        "label": "Run the app / server"
+      },
+      {
+        "value": "update_ci",
+        "label": "Update CI"
+      },
+      {
+        "value": "modify_deployment",
+        "label": "Modify deployment config"
+      },
+      {
+        "value": "run_scripts",
+        "label": "Run repo scripts (e.g. npm test)"
+      },
+      {
+        "value": "outbound_network",
+        "label": "Make outbound network calls (e.g. curl)"
+      },
+      {
+        "value": "auth_security",
+        "label": "Auth / security-sensitive changes"
       }
     ],
     "when_run_checks": [

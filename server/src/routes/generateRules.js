@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getSession } from '../store/sessionStore.js';
 import { validateAnswers } from '../schema/validate.js';
-import { runAgentFlow } from '../services/agentFlow.js';
+import { resolveSnippets } from '../services/agentFlow.js';
 import { generateRules } from '../services/rulesGenerator.js';
 
 export const generateRulesRoutes = Router();
@@ -33,9 +33,8 @@ generateRulesRoutes.post('/generate-rules', async (req, res) => {
   }
 
   try {
-    const result = runAgentFlow(answers);
-    const { snippetKeys, format, baseContent } = result;
-    const { content, filename } = await generateRules({ snippetKeys, format, baseContent });
+    const snippetPaths = resolveSnippets(answers);
+    const { content, filename } = await generateRules(snippetPaths);
     res.json({ content, filename });
   } catch (err) {
     console.error('generate-rules error:', err);

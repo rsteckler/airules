@@ -1,0 +1,289 @@
+{
+  "$comment": "Maps questionnaire answers to snippet files. All paths relative to server/snippets/. For each question: include snippets for selected options. If defaultSnippet is set, include it when the question is answered with any non-none value. Deduplicate across questions in the final output.",
+  "globalSnippets": ["default.md"],
+  "questions": {
+    "web_language": {
+      "map": {
+        "typescript": "languages/typescript.md",
+        "javascript": "languages/javascript.md",
+        "html": "languages/html.md",
+        "css": "languages/css.md"
+      }
+    },
+    "web_frameworks": {
+      "map": {
+        "react": "frameworks/web/react.md",
+        "nextjs_app_router": "frameworks/web/nextjs-app.md",
+        "nextjs_pages_router": "frameworks/web/nextjs-pages.md",
+        "vue": "frameworks/web/vue.md",
+        "angular": "frameworks/web/angular.md",
+        "svelte": "frameworks/web/svelte.md",
+        "solid": "frameworks/web/solid.md",
+        "qwik": "frameworks/web/qwik.md",
+        "astro": "frameworks/web/astro.md"
+      }
+    },
+    "state_react": {
+      "map": {
+        "redux": "frameworks/web/addons/redux.md",
+        "zustand": "frameworks/web/addons/zustand.md",
+        "mobx": "frameworks/web/addons/mobx.md",
+        "jotai": "frameworks/web/addons/jotai.md",
+        "recoil": "frameworks/web/addons/recoil.md"
+      }
+    },
+    "state_vue": {
+      "map": {
+        "pinia": "frameworks/web/addons/pinia.md",
+        "vuex": "frameworks/web/addons/vuex.md"
+      }
+    },
+    "state_angular": {
+      "map": {
+        "ngrx": "frameworks/web/addons/ngrx.md"
+      }
+    },
+    "state_svelte": {
+      "map": {
+        "svelte_stores": "frameworks/web/addons/svelte-stores.md"
+      }
+    },
+    "web_server_state": {
+      "map": {
+        "tanstack_query": "frameworks/web/addons/tanstack-query.md",
+        "swr": "frameworks/web/addons/swr.md",
+        "apollo": "frameworks/web/addons/apollo.md"
+      }
+    },
+    "web_styling": {
+      "map": {
+        "tailwind": "frameworks/web/css/tailwind.md",
+        "css_modules": "frameworks/web/css/cssmodules.md",
+        "styled_components": "frameworks/web/css/styled-components.md",
+        "mui": "frameworks/web/css/mui.md",
+        "chakra": "frameworks/web/css/chakra.md",
+        "shadcn_ui": "frameworks/web/css/shadcn.md",
+        "postcss": "frameworks/web/css/postcss.md",
+        "sass": "frameworks/web/css/sass.md"
+      }
+    },
+    "mobile_language": {
+      "map": {
+        "typescript_javascript": ["languages/typescript.md", "languages/javascript.md"],
+        "dart": "languages/dart.md",
+        "swift": "languages/swift.md",
+        "kotlin": "languages/java-kotlin.md"
+      }
+    },
+    "mfw_js": {
+      "map": {
+        "react_native": "frameworks/mobile/react-native.md",
+        "expo": "frameworks/mobile/expo.md"
+      }
+    },
+    "mfw_dart": {
+      "map": {
+        "flutter": "frameworks/mobile/flutter.md"
+      }
+    },
+    "mfw_swift": {
+      "map": {
+        "native_ios": "frameworks/mobile/ios.md"
+      }
+    },
+    "mfw_kotlin": {
+      "map": {
+        "native_android": "frameworks/mobile/android.md"
+      }
+    },
+    "server_language": {
+      "map": {
+        "typescript": "languages/typescript.md",
+        "javascript": "languages/javascript.md",
+        "python": "languages/python.md",
+        "go": "languages/go.md",
+        "java_kotlin": "languages/java-kotlin.md",
+        "rust": "languages/rust.md",
+        "ruby": "languages/ruby.md"
+      }
+    },
+    "fw_node": {
+      "map": {
+        "express": "frameworks/server/express.md",
+        "fastify": "frameworks/server/fastify.md",
+        "nestjs": "frameworks/server/nestjs.md",
+        "hono": "frameworks/server/hono.md",
+        "nitro": "frameworks/server/nitro.md"
+      }
+    },
+    "fw_python": {
+      "map": {
+        "fastapi": "frameworks/server/fastapi.md",
+        "django": "frameworks/server/django.md",
+        "flask": "frameworks/server/flask.md"
+      }
+    },
+    "fw_go": {
+      "map": {
+        "gin": "frameworks/server/gin.md",
+        "echo": "frameworks/server/echo.md",
+        "fiber": "frameworks/server/fiber.md"
+      }
+    },
+    "fw_java": {
+      "map": {
+        "spring_boot": "frameworks/server/springboot.md",
+        "ktor": "frameworks/server/ktor.md"
+      }
+    },
+    "fw_rust": {
+      "map": {
+        "axum": "frameworks/server/axum.md",
+        "actix": "frameworks/server/actix.md",
+        "rocket": "frameworks/server/rocket.md"
+      }
+    },
+    "fw_ruby": {
+      "map": {
+        "rails": "frameworks/server/rails.md",
+        "sinatra": "frameworks/server/sinatra.md"
+      }
+    },
+    "database_type": {
+      "map": {
+        "postgres_mysql": "data/database/postgres-mysql.md",
+        "sqlite": "data/database/sqlite.md",
+        "mongodb": "data/database/mongodb.md",
+        "dynamodb": "data/database/dynamo.md",
+        "redis": "data/database/redis.md",
+        "supabase": "data/database/supabase.md"
+      }
+    },
+    "orm_sql": {
+      "map": {
+        "prisma": "data/orm/prisma.md",
+        "typeorm": "data/orm/typeorm.md",
+        "sequelize": "data/orm/sequelize.md",
+        "drizzle": "data/orm/drizzle.md",
+        "sqlalchemy": "data/orm/sqlalchemy.md",
+        "django_orm": "data/orm/django-orm.md",
+        "gorm": "data/orm/gorm.md",
+        "hibernate": "data/orm/hibernate.md"
+      }
+    },
+    "orm_mongo": {
+      "map": {
+        "mongoose": "data/orm/mongoose.md"
+      }
+    },
+    "orm_supabase": {
+      "map": {
+        "prisma": "data/orm/prisma.md",
+        "drizzle": "data/orm/drizzle.md"
+      }
+    },
+    "desktop_framework": {
+      "map": {
+        "electron": "frameworks/desktop/electron.md",
+        "tauri": "frameworks/desktop/tauri.md",
+        "dotnet_desktop": "frameworks/desktop/dotnet.md",
+        "native_macos": "frameworks/desktop/macos.md"
+      }
+    },
+    "cli_language": {
+      "map": {
+        "typescript_javascript": ["languages/typescript.md", "languages/javascript.md"],
+        "python": "languages/python.md",
+        "go": "languages/go.md",
+        "rust": "languages/rust.md"
+      }
+    },
+    "testing_tools": {
+      "defaultSnippet": "frameworks/testing/default.md",
+      "map": {
+        "jest": "frameworks/testing/jest.md",
+        "vitest": "frameworks/testing/vitest.md",
+        "playwright": "frameworks/testing/playwright.md",
+        "cypress": "frameworks/testing/cypress.md",
+        "detox": "frameworks/testing/detox.md",
+        "pytest": "frameworks/testing/pytest.md",
+        "go_test": "frameworks/testing/go-test.md"
+      }
+    },
+    "documentation_system": {
+      "defaultSnippet": "documentation/default.md",
+      "map": {
+        "readme_only": "documentation/readme-doc.md",
+        "md_docs_folder": "documentation/markdown.md",
+        "docusaurus": "documentation/docusaurus.md",
+        "storybook": "documentation/storybook.md",
+        "typedoc": "documentation/typedoc.md",
+        "sphinx": "documentation/sphinx.md",
+        "mkdocs": "documentation/mkdocs.md"
+      }
+    },
+    "deployment_target": {
+      "map": {
+        "vercel": "deployments/vercel.md",
+        "aws": "deployments/aws.md",
+        "gcp": "deployments/gcp.md",
+        "azure": "deployments/azure.md",
+        "self_hosted_docker": "deployments/docker.md"
+      }
+    },
+    "package_manager": {
+      "map": {
+        "pnpm": "packagemanagers/pnpm.md",
+        "yarn": "packagemanagers/yarn.md",
+        "npm": "packagemanagers/npm.md"
+      }
+    },
+    "ai_permissions": {
+      "map": {
+        "delete_files": "preferences/permissions/delete.md",
+        "install_packages": "preferences/permissions/install-deps.md",
+        "run_app": "preferences/permissions/run-app.md",
+        "update_ci": "preferences/permissions/update-ci.md",
+        "modify_deployment": "preferences/permissions/modify-deployment.md",
+        "run_scripts": "preferences/permissions/run-scripts.md",
+        "outbound_network": "preferences/permissions/outbound-network.md",
+        "auth_security": "preferences/permissions/auth-security.md"
+      }
+    },
+    "when_run_checks": {
+      "map": {
+        "never_unless_asked": "preferences/checks/never.md",
+        "after_meaningful_changes": "preferences/checks/meaningful-changes.md",
+        "before_commit": "preferences/checks/commit.md"
+      }
+    },
+    "git_behavior": {
+      "map": {
+        "git_none": "preferences/git/never.md",
+        "git_push_when_asked": "preferences/git/commit-only.md",
+        "git_push": "preferences/git/commit-and-push.md"
+      }
+    },
+    "documentation_expectations": {
+      "map": {
+        "dont_touch_unless_asked": "preferences/docs/never.md",
+        "update_when_behavior_changes": "preferences/docs/proactive.md"
+      }
+    },
+    "output_preference": {
+      "map": {
+        "code_only": "preferences/interaction/code.md",
+        "plan_then_code": "preferences/interaction/plan-code.md",
+        "code_plus_brief": "preferences/interaction/code-brief.md",
+        "verbose_explanation": "preferences/interaction/code-verbose.md"
+      }
+    },
+    "uncertainty_handling": {
+      "map": {
+        "ask_before_proceeding": "preferences/uncertainty/clarify-all.md",
+        "ask_one_question_then_proceed": "preferences/uncertainty/clarify-one.md",
+        "best_assumption_continue": "preferences/uncertainty/best-guess.md"
+      }
+    }
+  }
+}
