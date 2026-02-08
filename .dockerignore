@@ -1,0 +1,16 @@
+node_modules
+client/node_modules
+server/node_modules
+apps
+**/dist
+**/.git
+**/*.test.js
+**/__tests__
+coverage
+.env
+.env.*
+*.log
+.gitignore
+.dockerignore
+README.md
+ai

@@ -280,7 +280,7 @@ export function Questionnaire({ onBackToStart, initialStepIndex = 0 }) {
                 {i === 0 && id !== RESULTS_STEP_ID && (
                   <div className="questionnaire-intro-wrap">
                     <p className="questionnaire-intro">
-                      Get better results from your coding agent by creating a rules file that ensures the agent
+                      Get better results from Cursor and Claude by creating a rules file that ensures the agent
                       follows best practices tailored to your repository, the stack you use, and your own
                       developer preferences.
                     </p>

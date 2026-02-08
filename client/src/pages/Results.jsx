@@ -79,7 +79,7 @@ export function ResultsCard({ onBackToQuestionnaire, flowData, skipped, traversa
         </button>
       </div>
       <p className="results-instructions">
-        Copy the content above (or the downloaded file) to <code>.cursorrules</code> (Cursor) or <code>claude.md</code> (Claude Code) in the root of your project.
+        Copy the content above (or the downloaded file) to <code>.cursorrules</code> (Cursor) or <code>CLAUDE.md</code> (Claude Code) in the root of your project.
       </p>
       <button type="button" className="results-back" onClick={onBackToQuestionnaire}>
         Start Over

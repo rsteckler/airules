@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { ThemeToggle } from './ThemeToggle';
 import { useOrb } from '../context/OrbContext';
 import { Orb } from './orb';
 
@@ -29,11 +28,8 @@ export function SiteHeader() {
         <Orb ref={orbRef} initialConfig={headerOrbConfig} />
       </div>
       <nav className="site-header__nav" aria-label="Main">
-        <span className="site-header__tagline">AI Rules Generator</span>
+        <span className="site-header__tagline">CursorRules and Claude.md Generator</span>
       </nav>
-      <div className="site-header__actions">
-        <ThemeToggle />
-      </div>
     </header>
   );
 }
