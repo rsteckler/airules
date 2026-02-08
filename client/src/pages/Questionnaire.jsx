@@ -12,6 +12,7 @@ import {
   isNodeComplete,
 } from '../engine/traversal.js';
 import { validateNode } from '../engine/validator.js';
+import { trackQuestionView, trackQuestionAnswer, trackQuestionSkip, trackResultsView } from '../analytics';
 
 export function Questionnaire({ onBackToStart, initialStepIndex = 0 }) {
   const { answers, dispatch, sessionId, setSessionId, skipped, skipQuestion, unskipQuestion, resetSkipped } = useQuestionnaire();
@@ -105,6 +106,20 @@ export function Questionnaire({ onBackToStart, initialStepIndex = 0 }) {
       setStepIndex(traversalOrder.length);
     }
   }, [traversalOrder.length, stepIndex]);
+
+  // ── Analytics: question view ───────────────────────────────────
+  useEffect(() => {
+    if (currentNodeData?.questionId != null && stepIndex < traversalOrder.length) {
+      trackQuestionView(currentNodeData.questionId, stepIndex, totalSteps);
+    }
+  }, [stepIndex, currentNodeData?.questionId, totalSteps, traversalOrder.length]);
+
+  // ── Analytics: results view ──────────────────────────────────────
+  useEffect(() => {
+    if (traversalOrder.length > 0 && stepIndex === traversalOrder.length) {
+      trackResultsView();
+    }
+  }, [stepIndex, traversalOrder.length]);
 
   // ── Resize observer for stack animation ─────────────────────────
   useEffect(() => {
@@ -201,6 +216,10 @@ export function Questionnaire({ onBackToStart, initialStepIndex = 0 }) {
       }
     }
 
+    if (currentNodeData?.questionId) {
+      trackQuestionAnswer(currentNodeData.questionId, answers[currentNodeData.questionId], stepIndex);
+    }
+
     setValidationError(null);
     setReturnedFromBack(false);
     persistAnswers();
@@ -214,8 +233,8 @@ export function Questionnaire({ onBackToStart, initialStepIndex = 0 }) {
   };
 
   const handleSkip = () => {
-    // Skip removes the answer and marks the question as skipped
     if (currentNodeData) {
+      trackQuestionSkip(currentNodeData.questionId, stepIndex);
       skipQuestion(currentNodeData.questionId);
     }
 
