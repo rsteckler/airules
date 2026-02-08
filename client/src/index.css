@@ -123,6 +123,25 @@ select {
   pointer-events: auto;
 }
 
+.site-header__github {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-text-muted, #a0a0a0);
+  transition: color 0.15s ease;
+  z-index: 10;
+}
+
+.site-header__github:hover {
+  color: var(--color-text, #e8e8e8);
+}
+
 .site-header__tagline {
   font-family: 'Syne', system-ui, sans-serif;
   font-weight: 600;

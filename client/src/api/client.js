@@ -1,8 +1,14 @@
 /**
- * API client for the airules backend. Uses VITE_API_URL (default http://localhost:3000).
+ * API client for the airules backend.
+ * - VITE_API_URL set: use that (e.g. for a separate API server).
+ * - Production, unset/empty: same-origin (empty string) so requests go to the host the app is served from.
+ * - Development: default http://localhost:3000 for the dev server.
  */
-
-const getBaseUrl = () => import.meta.env?.VITE_API_URL?.trim() || 'http://localhost:3000';
+function getBaseUrl() {
+  const env = import.meta.env?.VITE_API_URL?.trim();
+  if (env !== undefined && env !== '') return env;
+  return import.meta.env.DEV ? 'http://localhost:3000' : '';
+}
 
 async function request(path, options = {}) {
   const base = getBaseUrl().replace(/\/$/, '');
