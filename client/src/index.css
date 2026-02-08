@@ -923,6 +923,21 @@ select {
   color: #e8e8e8;
 }
 
+.results-instructions {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  color: #aaa;
+  flex-shrink: 0;
+}
+
+.results-instructions code {
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  background: #2a2a2a;
+  font-family: ui-monospace, monospace;
+  font-size: 0.9em;
+}
+
 .results-back {
   flex-shrink: 0;
   padding: 0.5rem 0;
